@@ -20,7 +20,7 @@
 ;; Keys for tables begin with 'C-c C-b'
 ;; Keys for special, uncommon tags begin with 'C-c C-s'.
 
-(defconst bbcode-tags
+(defconst dtext-tags
   '(("*"           nil                           "C-c C-l *" nil)
     ("attachment"  font-lock-variable-name-face  "C-c C-s a" 1)
     ("b"           bold                          "C-c C-t b" 1)
@@ -54,63 +54,52 @@
 (defconst dtext-font-lock-keywords
   `(;; Opening tag
     (,(concat (regexp-quote "[")
-	      (regexp-opt (mapcar #'car bbcode-tags) t)
+	      (regexp-opt (mapcar #'car dtext-tags) t)
 	      "]")
      (0 'font-lock-keyword-face))
     ;; Opening tag with attributes
-    (,(concat (regexp-quote "[")
-	      (regexp-opt (mapcar #'car bbcode-tags) t)
-	      
+    ;; (,(concat (regexp-quote "[")
+    ;; 	      (regexp-opt (mapcar #'car dtext-tags) t)
+    ;; 	      "[ =]]\\(.*?\\)"
+    ;; 	      "]")
+    ;;  (0 'font-lick-keyword-face)
+    ;;  (2 'font-lock-preprocessor-face t))
     ;; Closing tag
     (,(concat (regexp-quote "[/")
-	      (regexp-opt (mapcar #'car bbcode-tags) t)
+	      (regexp-opt (mapcar #'car dtext-tags) t)
 	      "]")
      (0 'font-lock-keyword-face))
-
-;; (defconst dtext-font-lock-lock-keywords
-;;   `(;; Opening tag.
-;;     (,(concat (regexp-quote "[")
-;;               (regexp-opt (mapcar #'car bbcode-tags) t)
-;;               "]")
-;;      (0 'font-lock-keyword-face))
-;;     ;; Opening tag with attribute.
-;;     (,(concat (regexp-quote "[")
-;;               (regexp-opt (mapcar #'car bbcode-tags) t)
-;;               "[ =]\\(.*?\\)"
-;;               "]")
-;;      (0 'font-lock-keyword-face)
-;;      (2 'font-lock-preprocessor-face t))
-;;     ;; Closing tag.
-;;     (,(concat (regexp-quote "[/")
-;;               (regexp-opt (mapcar #'car bbcode-tags) t)
-;;               "]")
-;;      (0 'font-lock-keyword-face))
-;;     ;; Highlight the body of some tags with a tag-specific face
-;;     ,@(let (patterns (face->tags (make-hash-table)))
-;;         (dolist (tag-spec bbcode-tags)
-;;           (let* ((tag (nth 0 tag-spec)) (face (nth 1 tag-spec)))
-;;             (puthash face (cons tag (gethash face face->tags)) face->tags)))
-;;         (maphash (lambda (face tags)
-;;                    (when face
-;;                      (push `(,(concat (regexp-quote "[")
-;;                                       (regexp-opt tags t)
-;;                                       "]"
-;;                                       "\\([^][]+\\)"
-;;                                       (regexp-quote "["))
-;;                              (2 ',face t))
-;;                            patterns)))
-;;                  face->tags)
-;;         patterns))
-;;   "Regular expressions to highlight BBCode markup.")
+    ;; Highlight the body of some tags with a tag-specific face
+    ,@(let (patterns (face->tags (make-hash-table)))
+	;; For each TAG-SPEC in DTEXT-TAGS...
+	(dolist (tag-spec dtext-tags)
+	  ;; TAG = first element
+	  ;; FACE = second element
+	  (let* ((tag (nth 0 tag-spec))
+		 (face (nth 1 tag-spec)))
+	    ;; FACE->TAGS[FACE] = (TAG . FACE->TAGS[FACE])
+	    (puthash face (cons tag (gethash face face->tags)) face->tags)))
+	(maphash (lambda (face tags)
+		   (when face
+		     (push `(,(concat (regexp-quote "[")   ;; [(b|th)](\[^\]\[\]+)[
+                                      (regexp-opt tags t)  ;;
+                                      "]"
+                                      "\\([^][]+\\)"
+				      (regexp-quote "["))
+			     (2 ',face t))
+			   patterns)))
+		 face->tags)
+	patterns))
+  "Regular expressions to match DText markup.")
 
 ;;;###autoload
 (define-derived-mode dtext-mode text-mode "DText"
   "Major mode for writing Danbooru's DText markup.
 
 \\{dtext-mode-map}"
-  (set font-lock-multiline t)
-  (set font-lock-defaults
-       '(dtext-font-lock-lock-keywords nil t))
+  (set 'font-lock-multiline t)
+  (set 'font-lock-defaults
+       '(dtext-font-lock-keywords nil t))
   (auto-fill-mode 0)
   (visual-line-mode 1))
 
