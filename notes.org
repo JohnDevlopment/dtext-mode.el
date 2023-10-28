@@ -1,0 +1,28 @@
+#+TITLE: Emacs: DText Mode
+#+STARTUP: content
+
+* TODO Font Lock
+  :LOGBOOK:
+  CLOCK: [2023-10-28 Sat 12:11]--[2023-10-28 Sat 12:56] =>  0:45
+  :END:
+
+~dtext-font-lock-keywords~ based on ~bbcode-font-lock-keywords~ in
+~bbcode-mode.el~.[fn:1]
+
+One of the highlighting rules is for opening tags:
+
+#+caption: bbcode-mode.el
+#+begin_src emacs-lisp -n 87
+`(;; Opening tag.
+  (,(concat (regexp-quote "[")
+            (regexp-opt (mapcar #'car bbcode-tags) t)
+            "]")
+   (0 'font-lock-keyword-face))
+#+end_src
+
+So basically, if we use ~[b]~ as an example, then the entire string is
+highlighted with ~font-lock-keyword-face~.
+
+* Footnotes
+
+[fn:1] file:/home/john/.emacs.d/elpa/bbcode-mode-20190304.2122/bbcode-mode.el
