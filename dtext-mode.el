@@ -90,6 +90,19 @@
   (auto-fill-mode 0)
   (visual-line-mode 1))
 
+(defmacro dtext-bind-bbcode-insert-tag-commands ()
+  "Bind `bbcode-mode''s insert-tag-* commands with their respective key bindings."
+  (declare (indent 2))
+  `(progn
+     ,@(cl-mapcan
+	(lambda (tag-spec)
+	  (cl-destructuring-bind (tag _face key _body . _attrs) tag-spec
+	    (let ((function-name (intern (format "bbcode-insert-tag-%s" tag))))
+	      `((define-key dtext-mode-map (kbd ',key) ',function-name)))))
+	dtext-tags)))
+
+(dtext-bind-bbcode-insert-tag-commands)
+
 (add-to-list 'auto-mode-alist '("\\.dtext$" . dtext-mode))
 
 (provide 'dtext-mode)
