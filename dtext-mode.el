@@ -103,6 +103,14 @@
 
 (dtext-bind-bbcode-insert-tag-commands)
 
+;;;###autoload
+(defun dtext-scratch ()
+  "Open *dtext-scratch* buffer to quickly edit DText posts."
+  (interactive)
+  (switch-to-buffer (get-buffer-create "*dtext-scratch*"))
+  (unless (equal 'dtext-mode major-mode)
+    (dtext-mode)))
+
 (add-to-list 'auto-mode-alist '("\\.dtext$" . dtext-mode))
 
 (provide 'dtext-mode)
