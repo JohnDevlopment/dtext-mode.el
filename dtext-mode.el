@@ -11,7 +11,7 @@
 
 ;;; Commentary:
 ;; A major mode for editing DText files. DText is the editing language for
-;; Danbooru.
+;; Danbooru. Automaticallu detects .dtext files.
 
 ;;; Code:
 
@@ -82,6 +82,10 @@
 ;;;###autoload
 (define-derived-mode dtext-mode text-mode "DText"
   "Major mode for writing Danbooru's DText markup.
+
+This mode map indirectly depends on `bbcode-mode', so make sure that is
+installed before this one. Some of the bbcode-insert-tag-* commands are binded
+to the same keys as they would be in `bbcode-mode'.
 
 \\{dtext-mode-map}"
   (set 'font-lock-multiline t)
