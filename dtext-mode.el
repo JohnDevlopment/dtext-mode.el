@@ -1,10 +1,11 @@
 ;;; dtext-mode.el --- Major mode for Danbooru DText
 
 ;; Copyright (C) 2023 John Russell
-;; Author: John Russell <johndevlopment7@gmail.com>
-;; URL:    https://github.com/JohnDevlopment/dtext-mode.el
-;; Package-Version: 0.1
-;; Package-Requires: ((emacs "24.4"))
+;; Author:           John Russell <johndevlopment7@gmail.com>
+;; URL:              https://github.com/JohnDevlopment/dtext-mode.el
+;; Keywords:         languages
+;; Package-Version:  0.1
+;; Package-Requires: ((emacs "24.4") (bbcode-mode "20190304.2122"))
 
 ;; This file is NOT part of Emacs
 
@@ -13,6 +14,10 @@
 ;; Danbooru.
 
 ;;; Code:
+
+(eval-when-compile
+  (require 'bbcode-mode)
+  (require 'cl-lib))
 
 ;; Keys that insert most tags are prefixed with 'C-c C-t'.
 ;; Keys related to modifying font properties begin with 'C-c C-f'.
