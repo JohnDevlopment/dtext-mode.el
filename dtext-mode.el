@@ -19,11 +19,76 @@
   (require 'bbcode-mode)
   (require 'cl-lib))
 
-;; Constants
+;;; Font Lock ==================================================================
+
+(require 'font-lock)
+
+(eval-and-compile
+  (defgroup dtext nil
+    "Major mode for editing DText files."
+    :prefix "dtext-"
+    :group 'text
+    :link '(url-link "https://github.com/JohnDevlopment/dtext-mode.el"))
+
+  (defgroup dtext-faces nil
+    "Faces used in DText Mode."
+    :group 'dtext
+    :group 'faces)
+
+  (defface dtext-wiki-link-face
+    '((t (:inherit link)))
+    "Face for wiki links."
+    :group 'dtext-faces)
+
+  (defface dtext-wiki-link-text-face
+    '((t (:inherit italic)))
+    "Face for the custom text in wiki links."
+    :group 'dtext-faces)
+
+  (defconst dtext-markdown-link-regexp
+    (rx "["
+	(group (+? nonl))
+	"]("
+	(group (? (or ?# ?/))
+	       (*? nonl))
+	")")
+    "The regular expression used for Markdown-style links")
+
+  (defconst dtext-bare-link-regexp
+    (rx "http" (? "s")
+	"://"
+	(? "www.")
+	(* (any "a-z" "A-Z" "-_.%/")))
+    "The regular expression used for bare links.")
+
+  (defconst dtext-angular-link-regexp
+    (rx "<http" (? "s")
+	"://"
+	(? "www.")
+	(* (any "a-z" "A-Z" "-_.%/"))
+	">")
+    "The regular expression used for links surrounded in angular braces.")
+
+  (defconst dtext-link-regexp
+    (rx "\""
+	(group (+? nonl))
+	"\":["
+	(group (? (or ?# ?/))
+	       (*? nonl))
+	"]")
+    "The regular expression used for DText-style links.")
+
+  (defconst dtext-wiki-link-regexp
+    (rx "[["
+	(group (+? nonl))
+	(? "|"
+	   (group (*? nonl)))
+	"]]")
+    "The regular expression used for wiki links.")
 
 ;; Keys that insert most tags are prefixed with 'C-c C-t'.
+;; Keys for DText-specific tags begin with 'C-c C-d'
 ;; Keys for tables begin with 'C-c C-b'
-(eval-and-compile
   (defconst dtext-tags
     '(("b"           bold                          "C-c C-t b" 1)
       ("code"        font-lock-function-name-face  "C-c C-t c" t)
@@ -37,20 +102,38 @@
       ("tr"          nil                           "C-c C-b r" 1)
       ("u"           underline                     "C-c C-t u" 1)))
 
-(eval-and-compile
   (defconst dtext-font-lock-keywords
-    `(;; Opening tag
+    `(;; Markdown-style links
+      (,dtext-markdown-link-regexp
+       (1 'link)
+       (2 'italic))
+      ;; DText links (e.g., "Example"[example.com]
+      (,dtext-link-regexp
+       (1 'italic)
+       (2 'link))
+      ;; Wiki links
+      (,dtext-wiki-link-regexp
+       (1 'dtext-wiki-link-face)
+       (2 'dtext-wiki-link-text-face))
+      ;; Links with angular marks
+      (,dtext-angular-link-regexp ;; "<https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*>"
+       (0 'link))
+      ;; Bare links
+      ;; (,url-handler-regexp (0 'link))
+      (,dtext-bare-link-regexp ;; "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
+       (0 'link))
+      ;; Opening tag
       (,(concat (regexp-quote "[")
 		(regexp-opt (mapcar #'car dtext-tags) t)
 		"]")
        (0 'font-lock-keyword-face))
       ;; Opening tag with attributes
-      ;; (,(concat (regexp-quote "[")
-      ;; 	      (regexp-opt (mapcar #'car dtext-tags) t)
-      ;; 	      "[ =]]\\(.*?\\)"
-      ;; 	      "]")
-      ;;  (0 'font-lick-keyword-face)
-      ;;  (2 'font-lock-preprocessor-face t))
+      (,(concat (regexp-quote "[")
+	      (regexp-opt (mapcar #'car dtext-tags) t)
+	      "[ =]]\\(.*?\\)"
+	      "]")
+       (0 'font-lock-keyword-face)
+       (2 'font-lock-preprocessor-face t))
       ;; Closing tag
       (,(concat (regexp-quote "[/")
 		(regexp-opt (mapcar #'car dtext-tags) t)
@@ -88,6 +171,7 @@ installed before this one. Some of the bbcode-insert-tag-* commands are binded
 to the same keys as they would be in `bbcode-mode'.
 
 \\{dtext-mode-map}"
+  :group 'dtext
   (set 'font-lock-multiline t)
   (set 'font-lock-defaults
        '(dtext-font-lock-keywords nil t))
