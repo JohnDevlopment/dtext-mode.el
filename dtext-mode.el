@@ -30,11 +30,12 @@
       ("i"           italic                        "C-c C-t i" 1)
       ("quote"       nil                           "C-c C-t q" 1)
       ("s"           nil                           "C-c C-t s" 1)
+      ("spoilers"    nil                           "C-c C-d s" 1)
       ("table"       nil                           "C-c C-b t" 1)
       ("td"          font-lock-variable-name-face  "C-c C-b d" 1)
       ("th"          bold                          "C-c C-b h" 1)
       ("tr"          nil                           "C-c C-b r" 1)
-      ("u"           underline                     "C-c C-t u" 1))))
+      ("u"           underline                     "C-c C-t u" 1)))
 
 (eval-and-compile
   (defconst dtext-font-lock-keywords
