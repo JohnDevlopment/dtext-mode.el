@@ -26,6 +26,41 @@ One of the highlighting rules is for opening tags:
 So basically, if we use ~[b]~ as an example, then the entire string is
 highlighted with ~font-lock-keyword-face~.
 
+** TODO Documentation
+   :LOGBOOK:
+   CLOCK: [2023-10-28 Sat 19:23]--[2023-10-28 Sat 19:38] =>  0:15
+   :END:
+
+<2023-10-28 Sat 19:23> - Writing documentation for major mode.
+<2023-10-28 Sat 19:38> - Wrote basic documentation.
+
+** DText Additions
+
+** TODO DText Subtractions
+   :LOGBOOK:
+   CLOCK: [2023-10-28 Sat 20:07]--[2023-10-28 Sat 20:41] =>  0:34
+   :END:
+
+Removed tags:
+
+- *
+- color
+- del
+- email
+- font
+- gvideo
+- li
+- list
+- manual
+- ol
+- size
+- style
+- ul
+- url
+- wiki
+- youtube
+- center
+
 * Footnotes
 
 [fn:1] file:/home/john/.emacs.d/elpa/bbcode-mode-20190304.2122/bbcode-mode.el
