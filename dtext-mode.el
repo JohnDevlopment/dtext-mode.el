@@ -111,6 +111,7 @@
   (unless (equal 'dtext-mode major-mode)
     (dtext-mode)))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.dtext$" . dtext-mode))
 
 (provide 'dtext-mode)
