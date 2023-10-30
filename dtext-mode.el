@@ -91,26 +91,7 @@
       ("u"           underline                     "C-c C-t u" 1)))
 
   (defconst dtext-font-lock-keywords
-    `(;; Markdown-style links
-      ;; (,dtext-markdown-link-regexp
-      ;;  (1 'link)
-      ;;  (2 'italic))
-      ;; ;; DText links (e.g., "Example"[example.com]
-      ;; (,dtext-link-regexp
-      ;;  (1 'italic)
-      ;;  (2 'link))
-      ;; ;; Wiki links
-      ;; (,dtext-wiki-link-regexp
-      ;;  (1 'dtext-wiki-link-face)
-      ;;  (2 'dtext-wiki-link-text-face))
-      ;; Links with angular marks
-      ;; (,dtext-angular-link-regexp ;; "<https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*>"
-      ;;  (0 'link))
-      ;; Bare links
-      ;; (,url-handler-regexp (0 'link))
-      ;; (,dtext-bare-link-regexp ;; "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
-      ;;  (0 'link))
-      ;; Opening tag
+    `(;; Opening tag
       (,(concat (regexp-quote "[")
 		(regexp-opt (mapcar #'car dtext-tags) t)
 		"]")
