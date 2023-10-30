@@ -35,6 +35,11 @@
     :group 'dtext
     :group 'faces)
 
+  (defface dtext-heading-face
+    '((t (:inherit bold)))
+    "Face for headings."
+    :group 'dtext-faces)
+
   (defface dtext-wiki-link-face
     '((t (:inherit link)))
     "Face for wiki links."
@@ -45,45 +50,28 @@
     "Face for the custom text in wiki links."
     :group 'dtext-faces)
 
+  (defconst dtext-heading-regexp
+    "^h[1-6]\\.[[:blank:]]*?.+"
+    "The regular expression for headings without IDs.")
+
   (defconst dtext-markdown-link-regexp
-    (rx "["
-	(group (+? nonl))
-	"]("
-	(group (? (or ?# ?/))
-	       (*? nonl))
-	")")
+    "\\[\\(.+?\\)](\\([#/]?.*?\\))"
     "The regular expression used for Markdown-style links")
 
   (defconst dtext-bare-link-regexp
-    (rx "http" (? "s")
-	"://"
-	(? "www.")
-	(* (any "a-z" "A-Z" "-_.%/")))
+    "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
     "The regular expression used for bare links.")
 
   (defconst dtext-angular-link-regexp
-    (rx "<http" (? "s")
-	"://"
-	(? "www.")
-	(* (any "a-z" "A-Z" "-_.%/"))
-	">")
+    "<https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*>"
     "The regular expression used for links surrounded in angular braces.")
 
   (defconst dtext-link-regexp
-    (rx "\""
-	(group (+? nonl))
-	"\":["
-	(group (? (or ?# ?/))
-	       (*? nonl))
-	"]")
+    "\"\\(.+?\\)\":\\[\\([#/]?.*?\\)]"
     "The regular expression used for DText-style links.")
 
   (defconst dtext-wiki-link-regexp
-    (rx "[["
-	(group (+? nonl))
-	(? "|"
-	   (group (*? nonl)))
-	"]]")
+    "\\[\\[\\(.+?\\)\\(?:|\\(.*?\\)\\)?]]"
     "The regular expression used for wiki links.")
 
 ;; Keys that insert most tags are prefixed with 'C-c C-t'.
@@ -104,24 +92,24 @@
 
   (defconst dtext-font-lock-keywords
     `(;; Markdown-style links
-      (,dtext-markdown-link-regexp
-       (1 'link)
-       (2 'italic))
-      ;; DText links (e.g., "Example"[example.com]
-      (,dtext-link-regexp
-       (1 'italic)
-       (2 'link))
-      ;; Wiki links
-      (,dtext-wiki-link-regexp
-       (1 'dtext-wiki-link-face)
-       (2 'dtext-wiki-link-text-face))
+      ;; (,dtext-markdown-link-regexp
+      ;;  (1 'link)
+      ;;  (2 'italic))
+      ;; ;; DText links (e.g., "Example"[example.com]
+      ;; (,dtext-link-regexp
+      ;;  (1 'italic)
+      ;;  (2 'link))
+      ;; ;; Wiki links
+      ;; (,dtext-wiki-link-regexp
+      ;;  (1 'dtext-wiki-link-face)
+      ;;  (2 'dtext-wiki-link-text-face))
       ;; Links with angular marks
-      (,dtext-angular-link-regexp ;; "<https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*>"
-       (0 'link))
+      ;; (,dtext-angular-link-regexp ;; "<https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*>"
+      ;;  (0 'link))
       ;; Bare links
       ;; (,url-handler-regexp (0 'link))
-      (,dtext-bare-link-regexp ;; "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
-       (0 'link))
+      ;; (,dtext-bare-link-regexp ;; "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
+      ;;  (0 'link))
       ;; Opening tag
       (,(concat (regexp-quote "[")
 		(regexp-opt (mapcar #'car dtext-tags) t)
@@ -134,6 +122,9 @@
 	      "]")
        (0 'font-lock-keyword-face)
        (2 'font-lock-preprocessor-face t))
+      ;; Headings
+      (,dtext-heading-regexp
+       (0 'dtext-heading-face))
       ;; Closing tag
       (,(concat (regexp-quote "[/")
 		(regexp-opt (mapcar #'car dtext-tags) t)
