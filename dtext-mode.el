@@ -40,14 +40,34 @@
     "Face for headings."
     :group 'dtext-faces)
 
-  (defface dtext-wiki-link-face
+  (defface dtext-link-face
+    '((t (:inherit link)))
+    "Face for regular links."
+    :group 'dtext-faces)
+
+  (defface dtext-keyword-face
+    '((t (:inherit font-lock-keyword-face)))
+    "Face for keywords."
+    :group 'dtext-faces)
+
+  (defface dtext-variable-face
+    '((t (:inherit font-lock-variable-name-face)))
+    "Face for variables."
+    :group 'dtext-faces)
+
+  (defface dtext-link-text-face
+    '((t (:inherit italic)))
+    "Face for the description in links."
+    :group 'dtext-faces)
+
+  (defface dtext-link-face
     '((t (:inherit link)))
     "Face for wiki links."
     :group 'dtext-faces)
 
-  (defface dtext-wiki-link-text-face
-    '((t (:inherit italic)))
-    "Face for the custom text in wiki links."
+  (defface dtext-code-face
+    '((t (:inherit font-lock-function-name-face)))
+    "Face for the text between code tags."
     :group 'dtext-faces)
 
   (defconst dtext-heading-regexp
@@ -74,34 +94,34 @@
     "\\[\\[\\(.+?\\)\\(?:|\\(.*?\\)\\)?]]"
     "The regular expression used for wiki links.")
 
-;; Keys that insert most tags are prefixed with 'C-c C-t'.
-;; Keys for DText-specific tags begin with 'C-c C-d'
-;; Keys for tables begin with 'C-c C-b'
+  ;; Keys that insert most tags are prefixed with 'C-c C-t'.
+  ;; Keys for DText-specific tags begin with 'C-c C-d'
+  ;; Keys for tables begin with 'C-c C-b'
   (defconst dtext-tags
-    '(("b"           bold                          "C-c C-t b" 1)
-      ("code"        font-lock-function-name-face  "C-c C-t c" t)
-      ("i"           italic                        "C-c C-t i" 1)
-      ("quote"       nil                           "C-c C-t q" 1)
-      ("s"           nil                           "C-c C-t s" 1)
-      ("spoilers"    nil                           "C-c C-d s" 1)
-      ("table"       nil                           "C-c C-b t" 1)
-      ("td"          font-lock-variable-name-face  "C-c C-b d" 1)
-      ("th"          bold                          "C-c C-b h" 1)
-      ("tr"          nil                           "C-c C-b r" 1)
-      ("u"           underline                     "C-c C-t u" 1)))
+    '(("b"           bold                "C-c C-t b" 1)
+      ("code"        dtext-code-face     "C-c C-t c" t)
+      ("i"           italic              "C-c C-t i" 1)
+      ("quote"       nil                 "C-c C-t q" 1)
+      ("s"           nil                 "C-c C-t s" 1)
+      ("spoilers"    nil                 "C-c C-d s" 1)
+      ("table"       nil                 "C-c C-b t" 1)
+      ("td"          dtext-variable-face "C-c C-b d" 1)
+      ("th"          bold                "C-c C-b h" 1)
+      ("tr"          nil                 "C-c C-b r" 1)
+      ("u"           underline           "C-c C-t u" 1)))
 
   (defconst dtext-font-lock-keywords
     `(;; Opening tag
       (,(concat (regexp-quote "[")
 		(regexp-opt (mapcar #'car dtext-tags) t)
 		"]")
-       (0 'font-lock-keyword-face))
+       (0 'dtext-keyword-face))
       ;; Opening tag with attributes
       (,(concat (regexp-quote "[")
 	      (regexp-opt (mapcar #'car dtext-tags) t)
 	      "[ =]]\\(.*?\\)"
 	      "]")
-       (0 'font-lock-keyword-face)
+       (0 'dtext-keyword-face)
        (2 'font-lock-preprocessor-face t))
       ;; Headings
       (,dtext-heading-regexp
@@ -110,7 +130,7 @@
       (,(concat (regexp-quote "[/")
 		(regexp-opt (mapcar #'car dtext-tags) t)
 		"]")
-       (0 'font-lock-keyword-face))
+       (0 'dtext-keyword-face))
       ;; Highlight the body of some tags with a tag-specific face
       ,@(let (patterns (face->tags (make-hash-table)))
 	  ;; For each TAG-SPEC in DTEXT-TAGS...
