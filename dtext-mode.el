@@ -82,17 +82,18 @@
     "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
     "The regular expression used for bare links.")
 
-  (defconst dtext-angular-link-regexp
-    "<https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*>"
-    "The regular expression used for links surrounded in angular braces.")
-
   (defconst dtext-link-regexp
-    "\"\\(.+?\\)\":\\[\\([#/]?.*?\\)]"
-    "The regular expression used for DText-style links.")
+    "\"\\(.+?\\)\":\\[\\([#/]?.+?\\)\\]"
+    "The regular expression used for DText-style links.
+Match group 1 is the description and match group 2 is the link.")
 
   (defconst dtext-wiki-link-regexp
     "\\[\\[\\(.+?\\)\\(?:|\\(.*?\\)\\)?]]"
     "The regular expression used for wiki links.")
+
+  (defconst dtext-topic-link-regexp
+    "topic #[1-9][0-9]*\\(?:/[1-9]\\(?:0-9\\)*\\)?"
+    "The regular expression for topic links.")
 
   ;; Keys that insert most tags are prefixed with 'C-c C-t'.
   ;; Keys for DText-specific tags begin with 'C-c C-d'
@@ -110,6 +111,24 @@
       ("tr"          nil                 "C-c C-b r" 1)
       ("u"           underline           "C-c C-t u" 1)))
 
+  (defconst dtext-post-links
+    (list
+     "post"        "forum"
+     "comment"     "pool"
+     "favgroup"    "wiki"
+     "user"        "ban"
+     "feeback"     "appeal"
+     "flag"        "note"
+     "BUR"         "alias"
+     "implication" "mod action"
+     "artist"      "issue"
+     "pixiv"       "pawoo"
+     "seiga"       "nijie"
+     "twitter"     "deviantart"
+     "artstation"  "sankaku"
+     "gelbooru"    "yandere")
+    "A list of post links (e.g., post #1)")
+
   (defconst dtext-font-lock-keywords
     `(;; Opening tag
       (,(concat (regexp-quote "[")
@@ -123,6 +142,29 @@
 	      "]")
        (0 'dtext-keyword-face)
        (2 'font-lock-preprocessor-face t))
+      ;; Bare links
+      (,dtext-bare-link-regexp
+       (0 'dtext-link-face))
+      ;; DText-style Links
+      (,dtext-link-regexp
+       (1 'dtext-link-text-face)
+       (2 'dtext-link-face))
+      ;; Wiki links
+      (,dtext-wiki-link-regexp
+       (1 'dtext-link-face)
+       (2 'dtext-link-text-face))
+      ;; Markdown-style links
+      (,dtext-markdown-link-regexp
+       (1 'dtext-link-face)
+       (2 'dtext-link-text-face))
+      ;; Post links
+      (,(concat (regexp-opt dtext-post-links t)
+		(regexp-quote " #")
+		"[0-9]+")
+       (0 'dtext-link-face))
+      ;; Topic post links
+      (,dtext-topic-link-regexp
+       (0 'dtext-link-face t))
       ;; Headings
       (,dtext-heading-regexp
        (0 'dtext-heading-face))
