@@ -87,22 +87,30 @@
     "^h[1-6]\\.[[:blank:]]*?.+"
     "The regular expression for headings without IDs.")
 
-  (defconst dtext-markdown-link-regexp
+  ;; Link regular expressions
+  (defconst dtext-link-markdown-regexp
     "\\[\\(.+?\\)](\\([#/]?.*?\\))"
-    "The regular expression used for Markdown-style links")
+    "The regular expression used for Markdown-style links.
+Group 1 matches the text.
+Group 2 matches the URL.")
 
-  (defconst dtext-bare-link-regexp
+  (defconst dtext-link-url-regexp
     "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
-    "The regular expression used for bare links.")
+    "The regular expression used for bare links.
+Groups 1 and 2 are nil.")
 
   (defconst dtext-link-regexp
     "\"\\(.+?\\)\":\\[\\([#/]?.+?\\)\\]"
-    "The regular expression used for DText-style links.
-Match group 1 is the description and match group 2 is the link.")
+    "The regular expression used for DText-style links \"text\":[url].
+Group 1 matches the text.
+Group 2 matches the URL.")
 
-  (defconst dtext-wiki-link-regexp
+  (defconst dtext-link-wiki-regexp
     "\\[\\[\\(.+?\\)\\(?:|\\(.*?\\)\\)?]]"
-    "The regular expression used for wiki links.")
+    "The regular expression used for wiki links [[url]], [[url|text]], or [[url|]].
+Group 1 matches the URL.
+Group 2 matches the text (optional).")
+  ;;---
 
   (defconst dtext-topic-link-regexp
     "topic #[1-9][0-9]*\\(?:/[1-9]\\(?:0-9\\)*\\)?"
