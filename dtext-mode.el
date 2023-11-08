@@ -163,21 +163,8 @@ Group 2 matches the text (optional).")
 	      "]")
        (0 'dtext-keyword-face)
        (2 'font-lock-preprocessor-face t))
-      ;; Bare links
-      (,dtext-bare-link-regexp
-       (0 'dtext-link-face))
-      ;; DText-style Links
-      (,dtext-link-regexp
-       (1 'dtext-link-text-face)
-       (2 'dtext-link-face))
-      ;; Wiki links
-      (,dtext-wiki-link-regexp
-       (1 'dtext-link-face)
-       (2 'dtext-link-text-face))
-      ;; Markdown-style links
-      (,dtext-markdown-link-regexp
-       (1 'dtext-link-face)
-       (2 'dtext-link-text-face))
+      ;; Links
+      (dtext-fontify-wiki-links)
       ;; Post links
       (,(concat (regexp-opt dtext-post-links t)
 		(regexp-quote " #")
@@ -216,6 +203,105 @@ Group 2 matches the text (optional).")
 		   face->tags)
 	  patterns))
     "Regular expressions to match DText markup."))
+
+(defun dtext--range-property-any (begin end prop prop-values)
+  "Return t if PROP from BEGIN to END is equal to one of the given PROP-VALUES.
+Also returns t if PROP is a list containing one of the PROP-VALUES.
+Return nil otherwise."
+  (let (props)
+    (catch 'found
+      (dolist (loc (number-sequence begin end))
+        (when (setq props (get-text-property loc prop))
+          (cond ((listp props)
+                 ;; Props is a list, check for membership
+                 (dolist (val prop-values)
+                   (when (memq val props) (throw 'found loc))))
+                (t
+                 ;; Props is a scalar, check for equality
+                 (dolist (val prop-values)
+                   (when (eq val props) (throw 'found loc))))))))))
+
+(defun dtext--match-links (last &optional markdown wiki url-link)
+  "Match links with markup between point and LAST.
+TYPE indicates what kind of link it is.
+Group 1 corresponds to the text part, if any, of the link.
+Group 2 corresponds to the URL part."
+  (let* ((pattern (cond
+		   (markdown dtext-link-markdown-regexp)
+		   (wiki dtext-link-wiki-regexp)
+		   (url-link dtext-link-url-regexp)
+		   (t dtext-link-regexp)))
+	 (prohibited-faces '(dtext-code-face))
+	 beg end
+	 text-beg text-end
+	 url-beg url-end
+	 found)
+    (while
+	(and (not found)
+	     (< (point) last)
+	     (progn
+	       ;; Clear match data so we can test it
+	       (set-match-data nil)
+	       ;; Preliminary search. Continue search if it passes
+	       (re-search-forward pattern last 'limit)))
+      ;; Continue searching if this is part of a code block
+      (if (dtext--range-property-any (match-beginning 0)
+				     (match-end 0)
+				     'face prohibited-faces)
+	  (set-match-data nil)
+	(setq found t)))
+    (when found
+      (cond
+       (url-link
+	;; Plain URLs have no text, so set those to nil
+	(setq beg (match-beginning 0)
+	      end (match-end 0)
+	      text-beg nil
+	      text-end nil
+	      url-beg beg
+	      url-end end))
+       (wiki
+	;; Wiki links: [[id]], [[id|]], or [[id|text]]
+	(setq beg (match-beginning 0)
+	      end (match-end 0)
+	      text-beg (match-beginning 2)
+	      text-end (match-end 2)
+	      url-beg (match-beginning 1)
+	      url-end (match-end 1)
+	      ))
+       (t
+	;; DText and Markdown-style links
+	(setq beg (match-beginning 0)
+	      end (match-end 0)
+	      text-beg (match-beginning 1)
+	      text-end (match-end 1)
+	      url-beg (match-beginning 2)
+	      url-end (match-end 2))))
+      (set-match-data
+       (list
+	beg end
+	text-beg text-end
+	url-beg url-end)))
+    found))
+
+(defun dtext-fontify-wiki-links (last)
+  "Fontify link markup between point and LAST."
+  (when (dtext--match-links last nil t)
+    (let* ((text-beg (match-beginning 1))
+	   (text-end (match-end 1))
+	   (url-beg (match-beginning 2))
+	   (url-end (match-end 2))
+	   ;; Markup part
+           (mp (list 'invisible 'markdown-markup
+                     'rear-nonsticky t
+                     'font-lock-multiline t)))
+      (when text-beg
+	;; (add-text-properties text-beg text-end mp)
+	(add-face-text-property text-beg text-end 'dtext-link-text-face))
+      (when url-beg
+	;; (add-text-properties url-beg url-end mp)
+	(add-face-text-property url-beg url-end 'dtext-link-face))
+      t)))
 
 ;;;###autoload
 (define-derived-mode dtext-mode text-mode "DText"
