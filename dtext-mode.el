@@ -165,7 +165,9 @@ Group 2 matches the text (optional).")
        (2 'font-lock-preprocessor-face t))
       ;; Links
       (dtext-fontify-wiki-links)
-      (dtext-fontify-dtext-links)
+      (dtext-fontify-links)
+      (dtext-fontify-markdown-links)
+      (dtext-fontify-url-links)
       ;; Post links
       (,(concat (regexp-opt dtext-post-links t)
 		(regexp-quote " #")
