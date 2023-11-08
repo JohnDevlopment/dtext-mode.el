@@ -53,6 +53,11 @@
     "Face for headings."
     :group 'dtext-faces)
 
+  (defface dtext-strikethrough-face
+    '((t (:strike-through t)))
+    "Face for strikethrough text."
+    :group 'dtext-faces)
+
   (defface dtext-small-face
     '((t (:inherit shadow :scale 0.8)))
     "Face for small text."
@@ -125,19 +130,19 @@ Group 2 matches the text (optional).")
   ;; Keys for DText-specific tags begin with 'C-c C-d'
   ;; Keys for tables begin with 'C-c C-b'
   (defconst dtext-tags
-    '(("b"        bold                "C-c C-t b" 1)
-      ("code"     dtext-code-face     "C-c C-t c" t)
-      ("i"        italic              "C-c C-t i" 1)
-      ("quote"    nil                 "C-c C-t q" 1)
-      ("s"        nil                 "C-c C-t s" 1)
-      ("spoilers" nil                 "C-c C-d s" 1)
-      ("table"    nil                 "C-c C-b t" 1)
-      ("tbody"    nil                 nil         1)
-      ("td"       dtext-variable-face "C-c C-b d" 1)
-      ("th"       bold                "C-c C-b h" 1)
-      ("tn"       dtext-small-face    nil         1)
-      ("tr"       nil                 "C-c C-b r" 1)
-      ("u"        underline           "C-c C-t u" 1)))
+    '(("b"        bold                     "C-c C-t b" 1)
+      ("code"     dtext-code-face          "C-c C-t c" t)
+      ("i"        italic                   "C-c C-t i" 1)
+      ("quote"    nil                      "C-c C-t q" 1)
+      ("s"        dtext-strikethrough-face "C-c C-t s" 1)
+      ("spoilers" nil                      "C-c C-d s" 1)
+      ("table"    nil                      "C-c C-b t" 1)
+      ("tbody"    nil                      nil         1)
+      ("td"       dtext-variable-face      "C-c C-b d" 1)
+      ("th"       bold                     "C-c C-b h" 1)
+      ("tn"       dtext-small-face         nil         1)
+      ("tr"       nil                      "C-c C-b r" 1)
+      ("u"        underline                "C-c C-t u" 1)))
 
   (defconst dtext-post-links
     (list
