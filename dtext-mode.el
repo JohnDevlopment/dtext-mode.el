@@ -285,37 +285,91 @@ Group 2 corresponds to the URL part."
 	url-beg url-end)))
     found))
 
-(defun dtext-fontify-wiki-links (last)
-  "Fontify link markup between point and LAST."
-  (when (dtext--match-links last nil t)
-    (let* ((text-beg (match-beginning 1))
-	   (text-end (match-end 1))
-	   (url-beg (match-beginning 2))
-	   (url-end (match-end 2))
-	   ;; Markup part
-           (mp (list 'invisible 'markdown-markup
-                     'rear-nonsticky t
-                     'font-lock-multiline t)))
-      (when text-beg
-	;; (add-text-properties text-beg text-end mp)
-	(add-face-text-property text-beg text-end 'dtext-link-text-face))
-      (when url-beg
-	;; (add-text-properties url-beg url-end mp)
-	(add-face-text-property url-beg url-end 'dtext-link-face))
-      t)))
+(defmacro write-fontify-function (name doc args)
+  "Generates a function called dtext-fontify-NAME.
+DOC is the function's docstring, and ARGS is a list of arguments passed to
+`dtext--match-links' following LAST."
+  (declare (indent 2))
+  (let* ((name (symbol-name name))
+	 (function-name (intern
+			 (concat "dtext-fontify-"
+				 name))))
+    `(progn
+       (defun ,function-name (last) ,doc
+	      (when (dtext--match-links last ,@args)
+		(let* ((text-beg (match-beginning 1))
+		       (text-end (match-end 1))
+		       (url-beg (match-beginning 2))
+		       (url-end (match-end 2)))
+		  (when text-beg
+		    (add-face-text-property text-beg text-end 'dtext-link-text-face))
+		  (when url-beg
+		    (add-face-text-property url-beg url-end 'dtext-link-face))
+		  t))))))
 
-(defun dtext-fontify-dtext-links (last)
-  "Fontify link markup between point and last."
-  (when (dtext--match-links last nil nil nil)
-    (let* ((text-beg (match-beginning 1))
-	   (text-end (match-end 1))
-	   (url-beg (match-beginning 2))
-	   (url-end (match-end 2)))
-      (when text-beg
-	(add-face-text-property text-beg text-end 'dtext-link-text-face))
-      (when url-beg
-	(add-face-text-property url-beg url-end 'dtext-link-face))
-      t)))
+(write-fontify-function markdown-links
+    "Fontify Markdown-style links from point to LAST." (t))
+
+(write-fontify-function wiki-links
+    "Fontify wiki links from point to LAST." (nil t))
+
+(write-fontify-function url-links
+    "Fontify plain URLs from point to LAST." (nil nil t))
+
+(write-fontify-function links
+    "Fontify links from point to LAST." ())
+
+;; (defun dtext-fontify-wiki-links (last)
+;;   "Fontify link markup between point and LAST."
+;;   (when (dtext--match-links last nil t)
+;;     (let* ((text-beg (match-beginning 1))
+;; 	   (text-end (match-end 1))
+;; 	   (url-beg (match-beginning 2))
+;; 	   (url-end (match-end 2)))
+;;       (when text-beg
+;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
+;;       (when url-beg
+;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
+;;       t)))
+
+;; (defun dtext-fontify-dtext-links (last)
+;;   "Fontify link markup between point and last."
+;;   (when (dtext--match-links last nil nil nil)
+;;     (let* ((text-beg (match-beginning 1))
+;; 	   (text-end (match-end 1))
+;; 	   (url-beg (match-beginning 2))
+;; 	   (url-end (match-end 2)))
+;;       (when text-beg
+;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
+;;       (when url-beg
+;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
+;;       t)))
+
+;; (defun dtext-fontify-markdown-links (last)
+;;   "Fontify link markup between point and last."
+;;   (when (dtext--match-links last t nil nil)
+;;     (let* ((text-beg (match-beginning 1))
+;; 	   (text-end (match-end 1))
+;; 	   (url-beg (match-beginning 2))
+;; 	   (url-end (match-end 2)))
+;;       (when text-beg
+;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
+;;       (when url-beg
+;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
+;;       t)))
+
+;; (defun dtext-fontify-url-links (last)
+;;   "Fontify link markup between point and last."
+;;   (when (dtext--match-links last nil nil t)
+;;     (let* ((text-beg (match-beginning 1))
+;; 	   (text-end (match-end 1))
+;; 	   (url-beg (match-beginning 2))
+;; 	   (url-end (match-end 2)))
+;;       (when text-beg
+;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
+;;       (when url-beg
+;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
+;;       t)))
 
 ;;;###autoload
 (define-derived-mode dtext-mode text-mode "DText"
