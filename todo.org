@@ -1,5 +1,5 @@
 #+STARTUP: content hideblocks
-#+TODO: TODO(!) | DONE(@)
+#+TODO: TODO(t!) FIXME(f!) | DONE(d!) CANCELLED(c@)
 
 * DText Additions
 ** Tags
@@ -50,7 +50,9 @@ This creates a collaspible block of text.
 **** TODO Font Lock
      - State "TODO"       from              [2023-11-05 Sun 00:09]
      :LOGBOOK:
-     CLOCK: [2023-11-07 Tue 18:35]
+     CLOCK: [2023-11-07 Tue 20:15]--[2023-11-07 Tue 20:31] =>  0:16
+     CLOCK: [2023-11-07 Tue 18:46]--[2023-11-07 Tue 19:10] =>  0:24
+     CLOCK: [2023-11-07 Tue 18:35]--[2023-11-07 Tue 18:41] =>  0:06
      CLOCK: [2023-11-05 Sun 00:08]--[2023-11-05 Sun 01:04] =>  0:56
      CLOCK: [2023-10-31 Tue 22:40]--[2023-10-31 Tue 22:47] =>  0:07
      CLOCK: [2023-10-29 Sun 19:08]--[2023-10-29 Sun 19:10] =>  0:02
@@ -58,13 +60,13 @@ This creates a collaspible block of text.
      CLOCK: [2023-10-29 Sun 16:59]--[2023-10-29 Sun 17:26] =>  0:27
      :END:
 
-- [ ] bare link (e.g., ~example.com~)
-- [ ] angled link (e.g., ~<example.com>~
-- [ ] link with text
-  - [ ] link to an arbitrary URL (e.g., ~"Example":[example.com]~)
-  - [ ] link to a Danbooru page (e.g., ~"TOS":[/terms_of_service]~)
-  - [ ] link to a header (e.g., ~"Here":[#dtext-basic-formatting]~)
-- [ ] Markdown-style link (e.g., ~[Example](example.com)~)
+- [X] bare link (e.g., ~example.com~)
+- [X] angled link (e.g., ~<example.com>~
+- [X] link with text [3/3]
+  - [X] link to an arbitrary URL (e.g., ~"Example":[example.com]~)
+  - [X] link to a Danbooru page (e.g., ~"TOS":[/terms_of_service]~)
+  - [X] link to a header (e.g., ~"Here":[#dtext-basic-formatting]~)
+- [X] Markdown-style link (e.g., ~[Example](example.com)~)
 - [X] wiki links [3/3]
   - [X] normal link (e.g., ~[[Kantai Collection]]~)
   - [X] link with alternate text (e.g., ~[[Kantai Collection|Kancolle]]~)
