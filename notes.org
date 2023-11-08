@@ -1,64 +1,67 @@
-#+TITLE: Emacs: DText Mode
-#+STARTUP: content hideblocks
+#+TITLE: Notes
 
-* DONE Font Lock
-  :LOGBOOK:
-  CLOCK: [2023-10-28 Sat 17:15]--[2023-10-28 Sat 18:19] =>  1:04
-  CLOCK: [2023-10-28 Sat 16:36]--[2023-10-28 Sat 16:45] =>  0:09
-  CLOCK: [2023-10-28 Sat 16:14]--[2023-10-28 Sat 16:33] =>  0:19
-  CLOCK: [2023-10-28 Sat 12:11]--[2023-10-28 Sat 12:56] =>  0:45
-  :END:
+* dtext-fontify-wiki-links
 
-~dtext-font-lock-keywords~ based on ~bbcode-font-lock-keywords~ in
-~bbcode-mode.el~.[fn:1]
+Call  [[*dtext--match-links]] with args: ~last nil t [nil]~[fn:1]
 
-One of the highlighting rules is for opening tags:
+----------
 
-#+caption: bbcode-mode.el
-#+begin_src emacs-lisp -n 87
-`(;; Opening tag.
-  (,(concat (regexp-quote "[")
-            (regexp-opt (mapcar #'car bbcode-tags) t)
-            "]")
-   (0 'font-lock-keyword-face))
-#+end_src
+~pattern~ = conditions:
+- /markdown/ is nil
+- /wiki/ is t
+- /url-link/ is nil
+therefore: ~dtext-link-wiki-regexp~
 
-So basically, if we use ~[b]~ as an example, then the entire string is
-highlighted with ~font-lock-keyword-face~.
+----------
 
-* Documentation
-   :LOGBOOK:
-   CLOCK: [2023-10-28 Sat 19:23]--[2023-10-28 Sat 19:38] =>  0:15
-   :END:
+** Upon match
 
-<2023-10-28 Sat 19:23> - Writing documentation for major mode.
-<2023-10-28 Sat 19:38> - Wrote basic documentation.
+Get match groups 1 (text) and 2 (URL).
 
-* DONE DText Subtractions
-   :LOGBOOK:
-   CLOCK: [2023-10-28 Sat 20:07]--[2023-10-28 Sat 20:41] =>  0:34
-   :END:
+If there is match for the text, add the appropriate text properties to the
+characters within that range. Similarly, if there is a match for the URL, set
+those characters' properties as well.
 
-Removed tags:
+* dtext--match-links
 
-- *
-- color
-- del
-- email
-- font
-- gvideo
-- li
-- list
-- manual
-- ol
-- size
-- style
-- ul
-- url
-- wiki
-- youtube
-- center
+Prohibited faces:
+- dtext-code-face
+
+*** Loop
+
+Iterate through a loop with three conditions:
+1. No match found
+2. Point has not reached the end of the search region (/last/)
+3. Result of a regular expression search forward is non-nill
+
+In the body of the loop, do the following:
+
+Check if any of the characters in the range matched by said regular expression
+have one or more from a list of prohibited faces. If so, the match data is
+cleared.
+
+----------
+[IF BLOCK 1]
+
+If there is a match, the match data will be structured like this:
+- URL links
+  1. nil
+  2. URL
+- Wiki links
+  1. URL
+  2. text
+- DText and Markdown links
+  1. text
+  2. URL
+
+But in each of these cases, the match data is modified to make group 1 the text
+and group 2 the URL.
+
+At the end,
+
+[END IF BLOCK 1]
 
 * Footnotes
 
-[fn:1] file:/home/john/.emacs.d/elpa/bbcode-mode-20190304.2122/bbcode-mode.el
+[fn:1] Bracketed args are optional args that have been omitted; their defaults
+were used.
