@@ -12,8 +12,6 @@ Call  [[*dtext--match-links]] with args: ~last nil t [nil]~[fn:1]
 - /url-link/ is nil
 therefore: ~dtext-link-wiki-regexp~
 
-----------
-
 ** Upon match
 
 Get match groups 1 (text) and 2 (URL).
