@@ -165,6 +165,7 @@ Group 2 matches the text (optional).")
        (2 'font-lock-preprocessor-face t))
       ;; Links
       (dtext-fontify-wiki-links)
+      (dtext-fontify-dtext-links)
       ;; Post links
       (,(concat (regexp-opt dtext-post-links t)
 		(regexp-quote " #")
@@ -300,6 +301,19 @@ Group 2 corresponds to the URL part."
 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
       (when url-beg
 	;; (add-text-properties url-beg url-end mp)
+	(add-face-text-property url-beg url-end 'dtext-link-face))
+      t)))
+
+(defun dtext-fontify-dtext-links (last)
+  "Fontify link markup between point and last."
+  (when (dtext--match-links last nil nil nil)
+    (let* ((text-beg (match-beginning 1))
+	   (text-end (match-end 1))
+	   (url-beg (match-beginning 2))
+	   (url-end (match-end 2)))
+      (when text-beg
+	(add-face-text-property text-beg text-end 'dtext-link-text-face))
+      (when url-beg
 	(add-face-text-property url-beg url-end 'dtext-link-face))
       t)))
 
