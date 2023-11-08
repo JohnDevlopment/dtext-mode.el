@@ -232,7 +232,7 @@ Group 2 corresponds to the URL part."
 		   (wiki dtext-link-wiki-regexp)
 		   (url-link dtext-link-url-regexp)
 		   (t dtext-link-regexp)))
-	 (prohibited-faces '(dtext-code-face))
+	 (prohibited-faces '(dtext-code-face dtext-link-face))
 	 beg end
 	 text-beg text-end
 	 url-beg url-end
