@@ -127,6 +127,10 @@ Group 2 matches the text (optional).")
     "The regular expression used for search links.
 Group 1 matches the \"URL\".")
 
+  (defconst dtext-link-user-regexp
+    "@[-A-Z_a-z]+"
+    "The regular expression used for user links.")
+
   ;;---
 
   (defconst dtext-topic-link-regexp
@@ -188,6 +192,8 @@ Group 1 matches the \"URL\".")
       (dtext-fontify-markdown-links)
       (dtext-fontify-search-links)
       (dtext-fontify-url-links)
+      (,dtext-link-user-regexp
+       (0 'dtext-link-face))
       ;; Post links
       (,(concat (regexp-opt dtext-post-links t)
 		(regexp-quote " #")
