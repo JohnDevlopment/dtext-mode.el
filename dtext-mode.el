@@ -123,7 +123,9 @@ Group 1 matches the URL.
 Group 2 matches the text (optional).")
 
   (defconst dtext-link-search-regexp
-    "{{\\([ 0-9A-Z_a-z]+?\\)}}"
+    (rx "{{"
+	(group (+ (any " " "0-9" "A-Z" "a-z" ?_ ?- ?\( ?\))))
+	"}}")
     "The regular expression used for search links.
 Group 1 matches the \"URL\".")
 
@@ -131,11 +133,11 @@ Group 1 matches the \"URL\".")
     "@[-A-Z_a-z]+"
     "The regular expression used for user links.")
 
-  ;;---
-
   (defconst dtext-topic-link-regexp
     "topic #[1-9][0-9]*\\(?:/[1-9]\\(?:0-9\\)*\\)?"
     "The regular expression for topic links.")
+
+  ;;---
 
   ;; Keys that insert most tags are prefixed with 'C-c C-t'.
   ;; Keys for DText-specific tags begin with 'C-c C-d'
@@ -250,6 +252,11 @@ Return nil otherwise."
                  (dolist (val prop-values)
                    (when (eq val props) (throw 'found loc))))))))))
 
+(defun dtext--string-starts-with (pattern str)
+  "Returns t if PATTERN is found at the beginning of STR."
+  (let ((pattern (concat "^" pattern)))
+    (if (string-match pattern str) t)))
+
 (defun dtext--string-ends-with (pattern str)
   "Returns t if PATTERN is found at the end of STR."
   (let ((pattern (concat pattern "$")))
@@ -259,9 +266,32 @@ Return nil otherwise."
   "Returns t if PATTERN is found in STR."
   (if (string-match pattern str) t))
 
-;; (defun dtext--num-chars (char str)
-;;   (let ((sep (char-to-string char)))
-;;     (1- (length (split-string str sep)))))
+(defun dtext--is-valid-search-string (str)
+  "Validate the search string STR.
+This changes the global match data, so be sure to save it."
+  (let ((tags (split-string str " "))
+	subtag
+	idx)
+    (catch 'invalid
+      ;; Return nil if two or more of either underscores or
+      ;; hyphens are found
+      (when (string-match "\\*\\*+\\|--+\\|__+" str) ;;"\\([*-_]\\)\\1+"
+	(throw 'invalid nil))
+
+      (dolist (tag tags t)
+	;; Substring in case '-' is at the beginning
+	(setq subtag
+	      (if (string-match "^-" tag)
+		  (substring tag 1)
+		tag))
+	;; Check each tag for syntatical errors
+	(cond
+	 (;; Throw error if length goes beyond 170 characters
+	  (> (length subtag) 170)
+	  (throw 'invalid nil))
+	 (;; Tag starts or ends with an underscore
+	  (string-match "^_\\|_$" subtag)
+	  (throw 'invalid nil)))))))
 
 (defun dtext--match-links (last &optional markdown wiki search url-link)
   "Match links with markup between point and LAST.
@@ -321,10 +351,14 @@ Group 2 corresponds to the URL part."
 	;; contain more than 170 characters overall. The
 	;; other rules are handled by the regular expression.
 	(let ((substr (buffer-substring (match-beginning 1)
-					(match-end 1))))
-	  (if (not (or (dtext--string-ends-with "_" substr)
-		       (dtext--string-contains "__+" substr)
-		       (> (length substr) 170)))
+					(match-end 1)))
+	      result)
+	  ;; Backup the match data because we'll be using
+	  ;; regular expression functions.
+	  (save-match-data
+	    (setq result (dtext--is-valid-search-string substr)))
+
+	  (if result
 	      (setq beg (match-beginning 0)
 		    end (match-end 0)
 		    text-beg nil
