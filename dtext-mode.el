@@ -29,8 +29,9 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'bbcode-mode)
   (require 'cl-lib))
+
+(require 'bbcode-mode)
 
 ;;; Font Lock ==================================================================
 
@@ -120,6 +121,12 @@ Group 2 matches the URL.")
     "The regular expression used for wiki links [[url]], [[url|text]], or [[url|]].
 Group 1 matches the URL.
 Group 2 matches the text (optional).")
+
+  (defconst dtext-link-search-regexp
+    "{{\\([ 0-9A-Z_a-z]+?\\)}}"
+    "The regular expression used for search links.
+Group 1 matches the \"URL\".")
+
   ;;---
 
   (defconst dtext-topic-link-regexp
@@ -179,6 +186,7 @@ Group 2 matches the text (optional).")
       (dtext-fontify-wiki-links)
       (dtext-fontify-links)
       (dtext-fontify-markdown-links)
+      (dtext-fontify-search-links)
       (dtext-fontify-url-links)
       ;; Post links
       (,(concat (regexp-opt dtext-post-links t)
@@ -236,7 +244,20 @@ Return nil otherwise."
                  (dolist (val prop-values)
                    (when (eq val props) (throw 'found loc))))))))))
 
-(defun dtext--match-links (last &optional markdown wiki url-link)
+(defun dtext--string-ends-with (pattern str)
+  "Returns t if PATTERN is found at the end of STR."
+  (let ((pattern (concat pattern "$")))
+    (if (string-match pattern str) t)))
+
+(defun dtext--string-contains (pattern str)
+  "Returns t if PATTERN is found in STR."
+  (if (string-match pattern str) t))
+
+;; (defun dtext--num-chars (char str)
+;;   (let ((sep (char-to-string char)))
+;;     (1- (length (split-string str sep)))))
+
+(defun dtext--match-links (last &optional markdown wiki search url-link)
   "Match links with markup between point and LAST.
 TYPE indicates what kind of link it is.
 Group 1 corresponds to the text part, if any, of the link.
@@ -244,6 +265,7 @@ Group 2 corresponds to the URL part."
   (let* ((pattern (cond
 		   (markdown dtext-link-markdown-regexp)
 		   (wiki dtext-link-wiki-regexp)
+		   (search dtext-link-search-regexp)
 		   (url-link dtext-link-url-regexp)
 		   (t dtext-link-regexp)))
 	 (prohibited-faces '(dtext-code-face dtext-link-face))
@@ -284,6 +306,26 @@ Group 2 corresponds to the URL part."
 	      url-beg (match-beginning 1)
 	      url-end (match-end 1)
 	      ))
+       (search
+	;; Search links
+	;; This has some additional checks to it. Firstly,
+	;; the matched string cannot end with an
+	;; underscore. Second, there cannot be two or more
+	;; consecutive underscores. Third, the string cannot
+	;; contain more than 170 characters overall. The
+	;; other rules are handled by the regular expression.
+	(let ((substr (buffer-substring (match-beginning 1)
+					(match-end 1))))
+	  (if (not (or (dtext--string-ends-with "_" substr)
+		       (dtext--string-contains "__+" substr)
+		       (> (length substr) 170)))
+	      (setq beg (match-beginning 0)
+		    end (match-end 0)
+		    text-beg nil
+		    text-end nil
+		    url-beg (match-beginning 1)
+		    url-end (match-end 1))
+	    (setq found nil))))
        (t
 	;; DText and Markdown-style links
 	(setq beg (match-beginning 0)
@@ -327,63 +369,14 @@ DOC is the function's docstring, and ARGS is a list of arguments passed to
 (write-fontify-function wiki-links
     "Fontify wiki links from point to LAST." (nil t))
 
+(write-fontify-function search-links
+    "Fontify search links from point to LAST." (nil nil t))
+
 (write-fontify-function url-links
-    "Fontify plain URLs from point to LAST." (nil nil t))
+    "Fontify plain URLs from point to LAST." (nil nil nil t))
 
 (write-fontify-function links
     "Fontify links from point to LAST." ())
-
-;; (defun dtext-fontify-wiki-links (last)
-;;   "Fontify link markup between point and LAST."
-;;   (when (dtext--match-links last nil t)
-;;     (let* ((text-beg (match-beginning 1))
-;; 	   (text-end (match-end 1))
-;; 	   (url-beg (match-beginning 2))
-;; 	   (url-end (match-end 2)))
-;;       (when text-beg
-;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
-;;       (when url-beg
-;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
-;;       t)))
-
-;; (defun dtext-fontify-dtext-links (last)
-;;   "Fontify link markup between point and last."
-;;   (when (dtext--match-links last nil nil nil)
-;;     (let* ((text-beg (match-beginning 1))
-;; 	   (text-end (match-end 1))
-;; 	   (url-beg (match-beginning 2))
-;; 	   (url-end (match-end 2)))
-;;       (when text-beg
-;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
-;;       (when url-beg
-;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
-;;       t)))
-
-;; (defun dtext-fontify-markdown-links (last)
-;;   "Fontify link markup between point and last."
-;;   (when (dtext--match-links last t nil nil)
-;;     (let* ((text-beg (match-beginning 1))
-;; 	   (text-end (match-end 1))
-;; 	   (url-beg (match-beginning 2))
-;; 	   (url-end (match-end 2)))
-;;       (when text-beg
-;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
-;;       (when url-beg
-;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
-;;       t)))
-
-;; (defun dtext-fontify-url-links (last)
-;;   "Fontify link markup between point and last."
-;;   (when (dtext--match-links last nil nil t)
-;;     (let* ((text-beg (match-beginning 1))
-;; 	   (text-end (match-end 1))
-;; 	   (url-beg (match-beginning 2))
-;; 	   (url-end (match-end 2)))
-;;       (when text-beg
-;; 	(add-face-text-property text-beg text-end 'dtext-link-text-face))
-;;       (when url-beg
-;; 	(add-face-text-property url-beg url-end 'dtext-link-face))
-;;       t)))
 
 ;;;###autoload
 (define-derived-mode dtext-mode text-mode "DText"
