@@ -225,18 +225,25 @@ Group 1 matches the \"URL\".")
 	    (let* ((tag (nth 0 tag-spec))
 		   (face (nth 1 tag-spec)))
 	      ;; FACE->TAGS[FACE] = (TAG . FACE->TAGS[FACE])
-	      (puthash face (cons tag (gethash face face->tags)) face->tags)))
-	  (maphash (lambda (face tags)
-		     (when face
-		       (push `(,(concat (regexp-quote "[")   ;; [(b|th)](\[^\]\[\]+)[
-					(regexp-opt tags t)  ;;
-					"]"
-					"\\([^][]+\\)"
-					(regexp-quote "["))
-			       (2 ',face t))
-			     patterns)))
-		   face->tags)
-	  patterns))
+	      (unless (string= tag "nodtext")
+		(puthash face (cons tag (gethash face face->tags)) face->tags))))
+	  (maphash
+	   (lambda (face tags)
+	     (when face
+	       (push `(,(concat (regexp-quote "[")
+				(regexp-opt tags t)
+				"]"
+				"\\([^][]+\\)"
+				(regexp-quote "["))
+		       (2 ',face t))
+		     patterns)))
+	   face->tags)
+	  patterns)
+      ;; nodtext tag
+      (,(concat (regexp-quote "[nodtext]")
+		"\\([^][]+\\)"
+		(regexp-quote "["))
+       (1 'dtext-code-face t)))
     "Regular expressions to match DText markup."))
 
 (defun dtext--range-property-any (begin end prop prop-values)
