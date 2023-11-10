@@ -201,7 +201,7 @@ Group 1 matches the \"URL\".")
       (,dtext-link-user-regexp
        (0 'dtext-link-face))
       ;; Post links
-      (,(concat (regexp-opt dtext-post-links t)
+      (,(concat (regexp-opt dtext-post-links)
 		(regexp-quote " #")
 		"[0-9]+")
        (0 'dtext-link-face))
