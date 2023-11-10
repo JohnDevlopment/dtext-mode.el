@@ -146,15 +146,15 @@ Group 1 matches the \"URL\".")
     '(("b"        bold                     "C-c C-t b" 1)
       ("code"     dtext-code-face          "C-c C-t c" t)
       ("i"        italic                   "C-c C-t i" 1)
-      ("quote"    nil                      "C-c C-t q" 1)
+      ("quote"    nil                      "C-c C-t q" t)
       ("s"        nil                      "C-c C-t s" 1)
       ("spoilers" nil                      "C-c C-d s" 1)
-      ("table"    nil                      "C-c C-b t" 1)
-      ("tbody"    nil                      nil         1)
+      ("table"    nil                      "C-c C-b t" t)
+      ("tbody"    nil                      nil         t)
       ("td"       dtext-variable-face      "C-c C-b d" 1)
       ("th"       bold                     "C-c C-b h" 1)
       ("tn"       dtext-small-face         nil         1)
-      ("tr"       nil                      "C-c C-b r" 1)
+      ("tr"       nil                      "C-c C-b r" t)
       ("u"        underline                "C-c C-t u" 1)))
 
   (defconst dtext-post-links
@@ -434,19 +434,50 @@ to the same keys as they would be in `bbcode-mode'.
   (auto-fill-mode 0)
   (visual-line-mode 1))
 
-(defmacro dtext-bind-bbcode-insert-tag-commands ()
-  "Bind `bbcode-mode''s insert-tag-* commands with their respective key bindings."
+(defun dtext-insert-tag (tag body)
+  "Insert the DText tag named TAG at point.
+If START and END are provided, they specify the region
+around which to surround the start and end tags.
+
+BODY is 1 for a one-line tag, t for a multiline tag, and nil
+if the tag has no closing tag."
+  (let ((opening-tag (format "[%s]" tag))
+	(closing-tag (format "[/%s]" tag))
+	(between-tags (if (equal t body) "\n\n" ""))
+	(body-offset (if (equal t body) 1 0))
+	start)
+    ;; Use region
+    (when (use-region-p)
+      (let (end)
+	(setq start (region-beginning) end (region-end)
+	      between-tags (buffer-substring start end)
+	      body-offset (length between-tags))
+	(goto-char start)
+	(delete-region start end)))
+    (setq start (point))
+    (insert (concat opening-tag between-tags closing-tag))
+    (deactivate-mark)
+    (set-mark (+ start (length opening-tag)))
+    (goto-char (+ (mark) body-offset))))
+
+(defmacro dtext-bind-insert-tag-commands ()
   (declare (indent 2))
   `(progn
      ,@(cl-mapcan
 	(lambda (tag-spec)
-	  (cl-destructuring-bind (tag _face key _body . _attrs) tag-spec
-	    (when key
-	      (let ((function-name (intern (format "bbcode-insert-tag-%s" tag))))
-		`((define-key dtext-mode-map (kbd ',key) ',function-name))))))
+	  (let ()
+	    (cl-destructuring-bind (tag _face key body . _attrs) tag-spec
+	      (let ((function-name (intern (concat "dtext-insert-tag-" tag))))
+		`((defun ,function-name (&optional start end)
+		    ,(format "Insert the DText [%s] tag at point or %s the region."
+			     tag (if body "around" "before"))
+		    (interactive)
+		    (dtext-insert-tag ,tag ,body))
+		  ,(when key
+		     `(define-key dtext-mode-map (kbd ,key) ',function-name)))))))
 	dtext-tags)))
 
-(dtext-bind-bbcode-insert-tag-commands)
+(dtext-bind-insert-tag-commands)
 
 ;;;###autoload
 (defun dtext-scratch ()
