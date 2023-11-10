@@ -1,16 +1,17 @@
 #+STARTUP: content hideblocks
 #+TODO: TODO(t!) FIXME(f!) | DONE(d!) CANCELLED(c@)
 
-* DText Additions
-** Tags
+* TODO Tags
+   DEADLINE: <2023-12-02 Sat>
+
+   - State "TODO"       from              [2023-11-09 Thu 15:12]
 
 - [X] tn (e.g., ~[tn]example[/tn]~)
 - [X] spoilers (e.g., ~[spoilers]example[/spoilers]~)
 - [ ] nodtext (e.g., ~[nodtext]example[/nodtext]~)
 - [ ] expand (see *[[*Expand Tag]]*)
 
-*** Expand Tag
-
+** Expand Tag
 #+caption: Demonstration
 #+begin_src bbcode
 [expand]
@@ -22,8 +23,8 @@ This creates a collaspible block of text.
 [/expand]
 #+end_src
 
-** TODO Links
-   DEADLINE: <2023-10-29 Sun 17:00>
+** DONE Links
+   - State "DONE"       from "TODO"       [2023-11-09 Thu 16:25]
    :LOGBOOK:
    CLOCK: [2023-10-29 Sun 15:09]--[2023-10-29 Sun 15:17] =>  0:08
    CLOCK: [2023-10-29 Sun 15:01]--[2023-10-29 Sun 15:04] =>  0:03
@@ -33,23 +34,36 @@ This creates a collaspible block of text.
    :END:
 
 #+BEGIN: clocktable :scope subtree :maxlevel 2
-#+CAPTION: Clock summary at [2023-10-29 Sun 19:04]
-| Headline     | Time   |      |
-|--------------+--------+------|
-| *Total time* | *4:20* |      |
-|--------------+--------+------|
-| \_  Links    |        | 4:20 |
+#+CAPTION: Clock summary at [2023-11-09 Thu 15:18]
+| Headline     | Time    |       |
+|--------------+---------+-------|
+| *Total time* | *11:11* |       |
+|--------------+---------+-------|
+| \_  Links    |         | 11:11 |
 #+END:
 
-*** URL Links
-    DEADLINE: <2023-10-29 Sun 17:00>
+*** DONE URL Links
+    DEADLINE: <2023-11-09 Thu 21:00>
+    - State "DONE"       from "TODO"       [2023-11-09 Thu 16:24]
+    - State "TODO"       from              [2023-11-09 Thu 15:08]
     :LOGBOOK:
     CLOCK: [2023-10-29 Sun 15:26]--[2023-10-29 Sun 16:58] =>  1:32
     :END:
 
-**** TODO Font Lock
+**** DONE Font Lock
+     DEADLINE: <2023-11-09 Thu 21:00>
+     - State "DONE"       from "TODO"       [2023-11-09 Thu 16:20]
      - State "TODO"       from              [2023-11-05 Sun 00:09]
      :LOGBOOK:
+     CLOCK: [2023-11-09 Thu 15:58]--[2023-11-09 Thu 16:20] =>  0:22
+     CLOCK: [2023-11-09 Thu 15:20]--[2023-11-09 Thu 15:51] =>  0:31
+     CLOCK: [2023-11-09 Thu 02:21]--[2023-11-09 Thu 03:04] =>  0:43
+     CLOCK: [2023-11-08 Wed 22:41]--[2023-11-08 Wed 22:52] =>  0:11
+     CLOCK: [2023-11-08 Wed 19:31]--[2023-11-08 Wed 21:31] =>  2:00
+     CLOCK: [2023-11-08 Wed 19:15]--[2023-11-08 Wed 19:17] =>  0:02
+     CLOCK: [2023-11-08 Wed 13:04]--[2023-11-08 Wed 14:17] =>  1:13
+     CLOCK: [2023-11-08 Wed 12:17]--[2023-11-08 Wed 13:04] =>  0:47
+     CLOCK: [2023-11-08 Wed 11:46]--[2023-11-08 Wed 11:50] =>  0:04
      CLOCK: [2023-11-07 Tue 20:15]--[2023-11-07 Tue 20:31] =>  0:16
      CLOCK: [2023-11-07 Tue 18:46]--[2023-11-07 Tue 19:10] =>  0:24
      CLOCK: [2023-11-07 Tue 18:35]--[2023-11-07 Tue 18:41] =>  0:06
@@ -71,30 +85,16 @@ This creates a collaspible block of text.
   - [X] normal link (e.g., ~[[Kantai Collection]]~)
   - [X] link with alternate text (e.g., ~[[Kantai Collection|Kancolle]]~)
   - [X] link sans qualfieir (e.g., ~[[Fate (series)|]]~)
-- [ ] search link (e.g. ~{{kantai_collection comic}}~)
-- [ ] user (e.g., ~@bob~)
+- [X] search link (e.g. ~{{kantai_collection comic}}~)
+- [X] user (e.g., ~@bob~)
 
-**** Insertion Functions                                       :syntax_table:
-
-- [ ] bare link (e.g., ~example.com~)
-- [ ] angled link (e.g., ~<example.com>~
-- [ ] link with text (e.g., ~"Example":[example.com]~)
-  - [ ] link to a Danbooru page (e.g., ~"TOS":[/terms_of_service]~)
-  - [ ] link to a header (e.g., ~"Here":[#dtext-basic-formatting]~)
-- [ ] Markdown-style link (e.g., ~[Example](example.com)~)
-- [ ] wiki links [0/3]
-  - [ ] normal link (e.g., ~[[Kantai Collection]]~)
-  - [ ] link with alternate text (e.g., ~[[Kantai Collection|Kancolle]]~)
-  - [ ] link sans qualfieir (e.g., ~[[Fate (series)|]]~)
-- [ ] search link (e.g. ~{{kantai_collection comic}}~)
-- [ ] user (e.g., ~@bob~)
-
-*** TODO Post Links
+*** DONE Post Links
+    - State "DONE"       from "TODO"       [2023-11-08 Wed 11:36]
 
 - [X] link to post (e.g., ~post #1~)
-- [ ] link to forum topic [0/2]
-  - [ ] default (page 1) (e.g., ~topic #1~)
-  - [ ] by page (e.g., page 2) (e.g., ~topic #1/2~)
+- [X] link to forum topic [2/2]
+  - [X] default (page 1) (e.g., ~topic #1~)
+  - [X] by page (e.g., page 2) (e.g., ~topic #1/2~)
 - [X] link to forum post (e.g., ~forum #1~)
 - [X] link to comment (e.g., ~comment #1~)
 - [X] link to pool (e.g., ~pool #1~)
@@ -126,8 +126,10 @@ This creates a collaspible block of text.
 - [X] link to Gelbooru post (e.g., ~gelbooru #1~)
 - [X] link to Yande.re post (e.g., ~yandere #1~)
 
-** Tables
+** TODO Tables
+   DEADLINE: <2023-11-30 Thu>
 
+   - State "TODO"       from              [2023-11-09 Thu 17:07]
 #+caption: Table syntax
 #+begin_src bbcode
 [table]
@@ -198,9 +200,10 @@ h4#some-id. Some header
 #+end_src
 
 ** Lists
+   DEADLINE: <2023-11-18 Sat>
 
 #+caption: A demonstration of lists
-#+begin_src bbcode
+#+begin_src dtext
 ​* item 1
 ​* item2
 ​** item 2.a
@@ -216,6 +219,39 @@ Output:
   - item 2.b
 - item 3
 
-** HTML Tags
+* Insertion Functions
+     DEADLINE: <2023-11-30 Thu>
 
-Some day in the future, but not anytime soon.
+** DONE Basic tags
+  DEADLINE: <2023-11-11 Sat>
+  - State "DONE"       from "TODO"       [2023-11-09 Thu 20:12]
+  - State "TODO"       from              [2023-11-09 Thu 17:46]
+  :LOGBOOK:
+  CLOCK: [2023-11-09 Thu 17:51]--[2023-11-09 Thu 20:12] =>  2:21
+  :END:
+
+- [X] b
+- [X] i
+- [X] u
+- [X] s
+- [X] code
+- [X] quote
+- [X] expand
+- [X] tn
+- [X] nodtext
+- [X] spoilers
+
+** Links
+
+- [ ] bare link (e.g., ~example.com~)
+- [ ] angled link (e.g., ~<example.com>~
+- [ ] link with text (e.g., ~"Example":[example.com]~)
+  - [ ] link to a Danbooru page (e.g., ~"TOS":[/terms_of_service]~)
+  - [ ] link to a header (e.g., ~"Here":[#dtext-basic-formatting]~)
+- [ ] Markdown-style link (e.g., ~[Example](example.com)~)
+- [ ] wiki links [0/3]
+  - [ ] normal link (e.g., ~[[Kantai Collection]]~)
+  - [ ] link with alternate text (e.g., ~[[Kantai Collection|Kancolle]]~)
+  - [ ] link sans qualfieir (e.g., ~[[Fate (series)|]]~)
+- [ ] search link (e.g. ~{{kantai_collection comic}}~)
+- [ ] user (e.g., ~@bob~)
