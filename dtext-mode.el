@@ -188,7 +188,7 @@ Group 1 matches the \"URL\".")
       ;; Opening tag with attributes
       (,(concat (regexp-quote "[")
 	      (regexp-opt (mapcar #'car dtext-tags) t)
-	      "[ =]]\\(.*?\\)"
+	      "[ =]\\(.*?\\)"
 	      "]")
        (0 'dtext-keyword-face)
        (2 'font-lock-preprocessor-face t))
