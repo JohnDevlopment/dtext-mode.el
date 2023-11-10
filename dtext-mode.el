@@ -148,14 +148,18 @@ Group 1 matches the \"URL\".")
       ("i"        italic                   "C-c C-t i" 1)
       ("quote"    nil                      "C-c C-t q" t)
       ("s"        nil                      "C-c C-t s" 1)
+      ("u"        underline                "C-c C-t u" 1)
+
+      ("expand"   nil                      "C-c C-d e" t)
+      ("nodtext"  dtext-code-face          "C-c C-d n" t)
       ("spoilers" nil                      "C-c C-d s" 1)
+      ("tn"       dtext-small-face         "C-c C-d t" 1)
+
       ("table"    nil                      "C-c C-b t" t)
       ("tbody"    nil                      nil         t)
       ("td"       dtext-variable-face      "C-c C-b d" 1)
       ("th"       bold                     "C-c C-b h" 1)
-      ("tn"       dtext-small-face         nil         1)
-      ("tr"       nil                      "C-c C-b r" t)
-      ("u"        underline                "C-c C-t u" 1)))
+      ("tr"       nil                      "C-c C-b r" t)))
 
   (defconst dtext-post-links
     (list
