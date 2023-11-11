@@ -98,6 +98,10 @@
     "^h[1-6]\\(?:#[A-Za-z-]+\\)?\\.[A-Za-z-]*[[:blank:]]*?.+"
     "The regular expression for headings without IDs.")
 
+  (defconst dtext-list-regexp
+    "^\\(\\*+\\)"
+    "The regular expression for list items.")
+
   ;; Link regular expressions
   (defconst dtext-link-markdown-regexp
     "\\[\\(.+?\\)](\\([#/]?.*?\\))"
@@ -211,6 +215,9 @@ Group 1 matches the \"URL\".")
       ;; Headings
       (,dtext-heading-regexp
        (0 'dtext-heading-face))
+      ;; Lists
+      (,dtext-list-regexp
+       (1 'bold))
       ;; Closing tag
       (,(concat (regexp-quote "[/")
 		(regexp-opt (mapcar #'car dtext-tags) t)
