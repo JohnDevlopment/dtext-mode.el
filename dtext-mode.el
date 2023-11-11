@@ -158,12 +158,12 @@ Group 1 matches the \"URL\".")
       ("nodtext"  dtext-code-face          "C-c C-d n" t)
       ("spoilers" nil                      "C-c C-d s" 1)
       ("tn"       dtext-small-face         "C-c C-d t" 1)
-
-      ("table"    nil                      "C-c C-b t" t)
-      ("tbody"    nil                      nil         t)
-      ("td"       dtext-variable-face      "C-c C-b d" 1)
-      ("th"       bold                     "C-c C-b h" 1)
-      ("tr"       nil                      "C-c C-b r" t)))
+      ;; Table commands, prefix: 'C-c C-b'
+      ("table" nil                 nil         t)
+      ("tbody" nil                 nil         t)
+      ("td"    dtext-variable-face "C-c C-b d" 1)
+      ("th"    bold                "C-c C-b h" 1)
+      ("tr"    nil                 "C-c C-b r" t)))
 
   (defconst dtext-post-links
     (list
