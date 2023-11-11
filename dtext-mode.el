@@ -5,7 +5,7 @@
 ;; URL:              https://github.com/JohnDevlopment/dtext-mode.el
 ;; Keywords:         languages
 ;; Package-Version:  1.0-alpha1
-;; Package-Requires: ((emacs "24.4") (bbcode-mode "20190304.2122"))
+;; Package-Requires: ((emacs "24.4"))
 
 ;; This file is NOT part of Emacs
 
@@ -34,8 +34,6 @@
 
 (eval-when-compile
   (require 'cl-lib))
-
-(require 'bbcode-mode)
 
 ;;; Font Lock ==================================================================
 
@@ -443,10 +441,6 @@ DOC is the function's docstring, and ARGS is a list of arguments passed to
 ;;;###autoload
 (define-derived-mode dtext-mode text-mode "DText"
   "Major mode for writing Danbooru's DText markup.
-
-This mode map indirectly depends on `bbcode-mode', so make sure that is
-installed before this one. Some of the bbcode-insert-tag-* commands are binded
-to the same keys as they would be in `bbcode-mode'.
 
 \\{dtext-mode-map}"
   :group 'dtext
