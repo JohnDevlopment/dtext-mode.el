@@ -95,7 +95,7 @@
     :group 'dtext-faces)
 
   (defconst dtext-heading-regexp
-    "^h[1-6]\\.[[:blank:]]*?.+"
+    "^h[1-6]\\(?:#[A-Za-z-]+\\)?\\.[A-Za-z-]*[[:blank:]]*?.+"
     "The regular expression for headings without IDs.")
 
   ;; Link regular expressions
