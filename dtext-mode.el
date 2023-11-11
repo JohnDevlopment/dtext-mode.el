@@ -4,7 +4,7 @@
 ;; Author:           John Russell <johndevlopment7@gmail.com>
 ;; URL:              https://github.com/JohnDevlopment/dtext-mode.el
 ;; Keywords:         languages
-;; Package-Version:  0.1
+;; Package-Version:  1.0-alpha1
 ;; Package-Requires: ((emacs "24.4") (bbcode-mode "20190304.2122"))
 
 ;; This file is NOT part of Emacs
