@@ -306,7 +306,6 @@ This changes the global match data, so be sure to save it."
 	  (string-match "^_\\|_$" subtag)
 	  (throw 'invalid nil)))))))
 
-;; (defun dtext--match-links (last &optional markdown wiki search url-link)
 (defun dtext--match-links (last type)
   "Match links with markup between point and LAST.
 
@@ -318,13 +317,14 @@ If the return value is non-nil, the match data will be set:
 
 Group 1 corresponds to the text part, if any, of the link.
 Group 2 corresponds to the URL part."
-  (cl-assert (member type '(markdown wiki search url)))
+  (cl-assert (member type '(markdown wiki search url dtext)))
   (let* ((pattern (cond
-		   (markdown dtext-link-markdown-regexp)
-		   (wiki dtext-link-wiki-regexp)
-		   (search dtext-link-search-regexp)
-		   (url-link dtext-link-url-regexp)
-		   (t dtext-link-regexp)))
+		   ((eq type 'markdown) dtext-link-markdown-regexp)
+		   ((eq type 'wiki) dtext-link-wiki-regexp)
+		   ((eq type 'search) dtext-link-search-regexp)
+		   ((eq type 'url) dtext-link-url-regexp)
+		   ((eq type 'dtext) dtext-link-regexp)
+		   (t (user-error "Should not have reached this condition"))))
 	 (prohibited-faces '(dtext-code-face dtext-link-face))
 	 beg end
 	 text-beg text-end
@@ -346,7 +346,7 @@ Group 2 corresponds to the URL part."
 	(setq found t)))
     (when found
       (cond
-       (url-link
+       ((eq type 'url)
 	;; Plain URLs have no text, so set those to nil
 	(setq beg (match-beginning 0)
 	      end (match-end 0)
@@ -354,7 +354,7 @@ Group 2 corresponds to the URL part."
 	      text-end nil
 	      url-beg beg
 	      url-end end))
-       (wiki
+       ((eq type 'wiki)
 	;; Wiki links: [[id]], [[id|]], or [[id|text]]
 	(setq beg (match-beginning 0)
 	      end (match-end 0)
@@ -363,7 +363,7 @@ Group 2 corresponds to the URL part."
 	      url-beg (match-beginning 1)
 	      url-end (match-end 1)
 	      ))
-       (search
+       ((eq type 'search)
 	;; Search links
 	;; This has some additional checks to it. Firstly,
 	;; the matched string cannot end with an
@@ -402,12 +402,11 @@ Group 2 corresponds to the URL part."
 	url-beg url-end)))
     found))
 
-(defmacro write-fontify-function (name doc args)
-  "Generate a function called dtext-fontify-NAME.
-DOC is the function's docstring, and ARGS is a list of
-arguments passed to `dtext--match-links' following LAST.
-NAME is used to name the created function
-(dtext-fontify-NAME)."
+(defmacro write-fontify-function (name doc arg)
+  "Generate a function called dtext-fontify-NAME.  DOC is
+the function's docstring, and is the TYPE argument to
+`dtext--match-links'.  NAME is used to name the created
+function."
   (declare (indent 2))
   (let* ((name (symbol-name name))
 	 (function-name (intern
@@ -415,7 +414,7 @@ NAME is used to name the created function
 				 name))))
     `(progn
        (defun ,function-name (last) ,doc
-	      (when (dtext--match-links last ,@args)
+	      (when (dtext--match-links last ',arg)
 		(let* ((text-beg (match-beginning 1))
 		       (text-end (match-end 1))
 		       (url-beg (match-beginning 2))
@@ -427,19 +426,19 @@ NAME is used to name the created function
 		  t))))))
 
 (write-fontify-function markdown-links
-    "Fontify Markdown-style links from point to LAST." (t))
+    "Fontify Markdown-style links from point to LAST." markdown)
 
 (write-fontify-function wiki-links
-    "Fontify wiki links from point to LAST." (nil t))
+    "Fontify wiki links from point to LAST." wiki)
 
 (write-fontify-function search-links
-    "Fontify search links from point to LAST." (nil nil t))
+    "Fontify search links from point to LAST." search)
 
 (write-fontify-function url-links
-    "Fontify plain URLs from point to LAST." (nil nil nil t))
+    "Fontify plain URLs from point to LAST." url)
 
 (write-fontify-function links
-    "Fontify links from point to LAST." ())
+    "Fontify links from point to LAST." dtext)
 
 ;;;###autoload
 (define-derived-mode dtext-mode text-mode "DText"
