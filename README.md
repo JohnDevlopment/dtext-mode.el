@@ -59,38 +59,38 @@ Mnemonic: **T**​ag
 
 <tbody>
 <tr>
-<td class="org-left">`C-c C-t b`</td>
-<td class="org-left">`dtext-insert-tag-b`</td>
+<td class="org-left">C-c C-t b</td>
+<td class="org-left">dtext-insert-tag-b</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t c`</td>
-<td class="org-left">`dtext-insert-tag-code`</td>
+<td class="org-left">C-c C-t c</td>
+<td class="org-left">dtext-insert-tag-code</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t i`</td>
-<td class="org-left">`dtext-insert-tag-i`</td>
+<td class="org-left">C-c C-t i</td>
+<td class="org-left">dtext-insert-tag-i</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t q`</td>
-<td class="org-left">`dtext-insert-tag-quote`</td>
+<td class="org-left">C-c C-t q</td>
+<td class="org-left">dtext-insert-tag-quote</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t s`</td>
-<td class="org-left">`dtext-insert-tag-s`</td>
+<td class="org-left">C-c C-t s</td>
+<td class="org-left">dtext-insert-tag-s</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t u`</td>
-<td class="org-left">`dtext-insert-tag-u`</td>
+<td class="org-left">C-c C-t u</td>
+<td class="org-left">dtext-insert-tag-u</td>
 </tr>
 </tbody>
 </table>
@@ -118,20 +118,20 @@ Mnemonic: Ta​**b**​le
 
 <tbody>
 <tr>
-<td class="org-left">`C-c C-b d`</td>
-<td class="org-left">`dtext-insert-tag-td`</td>
+<td class="org-left">C-c C-b d</td>
+<td class="org-left">dtext-insert-tag-td</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-b h`</td>
-<td class="org-left">`dtext-insert-tag-th`</td>
+<td class="org-left">C-c C-b h</td>
+<td class="org-left">dtext-insert-tag-th</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-b r`</td>
-<td class="org-left">`dtext-insert-tag-tr`</td>
+<td class="org-left">C-c C-b r</td>
+<td class="org-left">dtext-insert-tag-tr</td>
 </tr>
 </tbody>
 </table>
@@ -159,38 +159,38 @@ Mnemonic: **D**​Text
 
 <tbody>
 <tr>
-<td class="org-left">`C-c C-t b`</td>
-<td class="org-left">`dtext-insert-tag-b`</td>
+<td class="org-left">C-c C-t b</td>
+<td class="org-left">dtext-insert-tag-b</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t c`</td>
-<td class="org-left">`dtext-insert-tag-code`</td>
+<td class="org-left">C-c C-t c</td>
+<td class="org-left">dtext-insert-tag-code</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t i`</td>
-<td class="org-left">`dtext-insert-tag-i`</td>
+<td class="org-left">C-c C-t i</td>
+<td class="org-left">dtext-insert-tag-i</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t q`</td>
-<td class="org-left">`dtext-insert-tag-quote`</td>
+<td class="org-left">C-c C-t q</td>
+<td class="org-left">dtext-insert-tag-quote</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t s`</td>
-<td class="org-left">`dtext-insert-tag-s`</td>
+<td class="org-left">C-c C-t s</td>
+<td class="org-left">dtext-insert-tag-s</td>
 </tr>
 
 
 <tr>
-<td class="org-left">`C-c C-t u`</td>
-<td class="org-left">`dtext-insert-tag-u`</td>
+<td class="org-left">C-c C-t u</td>
+<td class="org-left">dtext-insert-tag-u</td>
 </tr>
 </tbody>
 </table>
