@@ -277,20 +277,6 @@ Return nil otherwise."
                  (dolist (val prop-values)
                    (when (eq val props) (throw 'found loc))))))))))
 
-(defun dtext--string-starts-with (pattern str)
-  "Return t if PATTERN is found at the beginning of STR."
-  (let ((pattern (concat "^" pattern)))
-    (if (string-match pattern str) t)))
-
-(defun dtext--string-ends-with (pattern str)
-  "Return t if PATTERN is found at the end of STR."
-  (let ((pattern (concat pattern "$")))
-    (if (string-match pattern str) t)))
-
-(defun dtext--string-contains (pattern str)
-  "Return t if PATTERN is found in STR."
-  (if (string-match pattern str) t))
-
 (defun dtext--is-valid-search-string (str)
   "Validate the search string STR. Returns t if valid, nil
 otherwise.
