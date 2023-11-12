@@ -1,17 +1,19 @@
 #+STARTUP: content hideblocks
 #+TODO: TODO(t!) FIXME(f!) | DONE(d!) CANCELLED(c@)
 
-* TODO Tags
+* DONE Tags
    DEADLINE: <2023-12-02 Sat>
 
+   - State "DONE"       from "TODO"       [2023-11-09 Thu 23:24]
    - State "TODO"       from              [2023-11-09 Thu 15:12]
 
 - [X] tn (e.g., ~[tn]example[/tn]~)
 - [X] spoilers (e.g., ~[spoilers]example[/spoilers]~)
-- [ ] nodtext (e.g., ~[nodtext]example[/nodtext]~)
-- [ ] expand (see *[[*Expand Tag]]*)
+- [X] nodtext (e.g., ~[nodtext]example[/nodtext]~)
+- [X] expand (see *[[*Expand Tag]]*)
 
-** Expand Tag
+** DONE Expand Tag
+   - State "DONE"       from              [2023-11-09 Thu 23:24]
 #+caption: Demonstration
 #+begin_src bbcode
 [expand]
@@ -126,44 +128,6 @@ This creates a collaspible block of text.
 - [X] link to Gelbooru post (e.g., ~gelbooru #1~)
 - [X] link to Yande.re post (e.g., ~yandere #1~)
 
-** TODO Tables
-   DEADLINE: <2023-11-30 Thu>
-
-   - State "TODO"       from              [2023-11-09 Thu 17:07]
-#+caption: Table syntax
-#+begin_src bbcode
-[table]
-  [thead]
-    [tr]
-      [td]A[/td]
-      [td]B[/td]
-      [td]C[/td]
-    [/tr]
-  [/thead]
-  [tbody]
-    [tr]
-      [td]1[/td]
-      [td]2[/td]
-      [td]3[/td]
-    [/tr]
-    [tr]
-      [td]4[/td]
-      [td]5[/td]
-      [td]6[/td]
-    [/tr]
-  [/tbody]
-[/table]
-#+end_src
-
-This creates the following result:
-
-| A | B | C |
-|---+---+---|
-| 1 | 2 | 3 |
-| 4 | 5 | 6 |
-
-Mainly need a command for inserting tables.
-
 ** DONE Headers
    - State "DONE"       from "TODO"       [2023-11-08 Wed 01:38]
    - State "TODO"       from "DONE"       [2023-11-08 Wed 01:37]
@@ -192,15 +156,18 @@ language regardless. with that in mind...
 - [X] Header 5
 - [X] Header 6
 
-*** TODO With IDs
+*** DONE With IDs
+    - State "DONE"       from "TODO"       [2023-11-09 Thu 23:22]
     - State "TODO"       from              [2023-11-08 Wed 01:38]
 
 #+begin_src dtext
 h4#some-id. Some header
 #+end_src
 
-** Lists
+** DONE Lists
    DEADLINE: <2023-11-18 Sat>
+   - State "DONE"       from "TODO"       [2023-11-10 Fri 22:11]
+   - State "TODO"       from              [2023-11-10 Fri 22:05]
 
 #+caption: A demonstration of lists
 #+begin_src dtext
@@ -241,8 +208,11 @@ Output:
 - [X] nodtext
 - [X] spoilers
 
-** Links
+** TODO Links
+   DEADLINE: <2023-11-30 Thu>
+   - State "TODO"       from              [2023-11-09 Thu 23:30]
 
+#+begin_comment
 - [ ] bare link (e.g., ~example.com~)
 - [ ] angled link (e.g., ~<example.com>~
 - [ ] link with text (e.g., ~"Example":[example.com]~)
@@ -255,3 +225,42 @@ Output:
   - [ ] link sans qualfieir (e.g., ~[[Fate (series)|]]~)
 - [ ] search link (e.g. ~{{kantai_collection comic}}~)
 - [ ] user (e.g., ~@bob~)
+#+end_comment
+
+** TODO Tables
+   DEADLINE: <2023-11-30 Thu>
+   - State "TODO"       from              [2023-11-09 Thu 17:07]
+
+#+caption: Table syntax
+#+begin_src bbcode
+[table]
+  [thead]
+    [tr]
+      [td]A[/td]
+      [td]B[/td]
+      [td]C[/td]
+    [/tr]
+  [/thead]
+  [tbody]
+    [tr]
+      [td]1[/td]
+      [td]2[/td]
+      [td]3[/td]
+    [/tr]
+    [tr]
+      [td]4[/td]
+      [td]5[/td]
+      [td]6[/td]
+    [/tr]
+  [/tbody]
+[/table]
+#+end_src
+
+This creates the following result:
+
+| A | B | C |
+|---+---+---|
+| 1 | 2 | 3 |
+| 4 | 5 | 6 |
+
+Mainly need a command for inserting tables.
