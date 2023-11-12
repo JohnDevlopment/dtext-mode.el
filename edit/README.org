@@ -1,0 +1,81 @@
+#+TITLE: dtext-mode.el
+#+STARTUP: content hideblocks
+#+OPTIONS: toc:nil
+
+* dtext-mode.el
+  :PROPERTIES:
+  :UNNUMBERED: UNNUMBERED
+  :END:
+
+A major mode in Emacs for editing Danbooru DText.
+
+DText is the markup language used on Danbooru and other Booru
+sites. It implements syntax highlighting and keyboard commands for
+inserting basic formatting tags.
+
+To activate this major mode, use ~M-x dtext-mode~. To create a
+temporary buffer for editing posts, use ~M-x dtext-scratch~.
+
+* Install
+
+There are a couple of ways to do it. One way to do it--and the easiest--is to
+download one of the [[https://github.com/JohnDevlopment/dtext-mode.el/releases][releases]] and install it with ~M-x package-install-file~.
+
+Another way to install this is by manually putting ~dtext-mode.el~ in your
+~load-path~ and then using ~(require 'dtext-mode)~.
+
+* How To Report Bugs
+
+Please use Github Issues to report bugs.
+
+* Supported Tags
+  :PROPERTIES:
+  :UNNUMBERED: UNNUMBERED
+  :END:
+
+Below is a list of DText markup tags and their respective
+key-bindings. If you have a selected region, then DText Mode will wrap
+the tags around that region.
+
+Each key-binding has three parts: ~C-c~, the "group" of said binding,
+and a single letter taken from the name of that tag. Each section
+below provides a menmonic to help users remember them.
+
+** Common Tags
+
+Key-bindings begin with ~C-c C-t~ \\
+Mnemonic: *T*​ag
+
+| Key sequence | Command                |
+|--------------+------------------------|
+| C-c C-t b    | dtext-insert-tag-b     |
+| C-c C-t c    | dtext-insert-tag-code  |
+| C-c C-t i    | dtext-insert-tag-i     |
+| C-c C-t q    | dtext-insert-tag-quote |
+| C-c C-t s    | dtext-insert-tag-s     |
+| C-c C-t u    | dtext-insert-tag-u     |
+
+** Tags for Tables
+
+Key-bindings begin with ~C-c C-b~ \\
+Mnemonic: Ta​*b*​le
+
+| Key sequence | Command             |
+|--------------+---------------------|
+| C-c C-b d    | dtext-insert-tag-td |
+| C-c C-b h    | dtext-insert-tag-th |
+| C-c C-b r    | dtext-insert-tag-tr |
+
+** DText-Specific Tags
+
+Key-bindings begin with ~C-c C-s~ \\
+Mnemonic: *D*​Text
+
+| Key sequence | Command                |
+|--------------+------------------------|
+| C-c C-t b    | dtext-insert-tag-b     |
+| C-c C-t c    | dtext-insert-tag-code  |
+| C-c C-t i    | dtext-insert-tag-i     |
+| C-c C-t q    | dtext-insert-tag-quote |
+| C-c C-t s    | dtext-insert-tag-s     |
+| C-c C-t u    | dtext-insert-tag-u     |
