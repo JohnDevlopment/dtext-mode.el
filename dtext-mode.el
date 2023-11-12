@@ -23,11 +23,11 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
-;; A major mode for editing DText files. DText is the editing language for
-;; Danbooru, specifically for posts in which markup is allowed. It implements
+;; A major mode for editing DText files.  DText is the editing language for
+;; Danbooru, specifically for posts in which markup is allowed.  It implements
 ;; syntax highlighting and keyboard commands for basic tags.
 ;;
-;; Use M-x dtext-scratch to instantly get a temp buffer for editing posts. You
+;; Use M-x dtext-scratch to instantly get a temp buffer for editing posts.  You
 ;; can use M-x dtext-mode to switch to this major mode.
 
 ;;; Code:
@@ -40,6 +40,8 @@
 (require 'font-lock)
 
 (eval-and-compile
+  ;; Groups
+
   (defgroup dtext nil
     "Major mode for editing DText files."
     :prefix "dtext-"
@@ -50,6 +52,8 @@
     "Faces used in DText Mode."
     :group 'dtext
     :group 'faces)
+
+  ;; Faces
 
   (defface dtext-heading-face
     '((t (:inherit bold)))
@@ -96,6 +100,8 @@
     "Face for the text between code tags."
     :group 'dtext-faces)
 
+  ;; Regular expressions
+
   (defconst dtext-heading-regexp
     "^h[1-6]\\(?:#[A-Za-z-]+\\)?\\.[A-Za-z-]*[[:blank:]]*?.+"
     "The regular expression for headings without IDs.")
@@ -108,32 +114,31 @@
   (defconst dtext-link-markdown-regexp
     "\\[\\(.+?\\)](\\([#/]?.*?\\))"
     "The regular expression used for Markdown-style links.
-Group 1 matches the text.
-Group 2 matches the URL.")
+Group 1 matches the text.  Group 2 matches the URL.")
 
   (defconst dtext-link-url-regexp
     "https?://\\(?:www\\.\\)?[%./A-Z_a-z-]*"
-    "The regular expression used for bare links.
-Groups 1 and 2 are nil.")
+    "The regular expression used for bare links.  Groups 1
+and 2 are nil.")
 
   (defconst dtext-link-regexp
     "\"\\(.+?\\)\":\\[\\([#/]?.+?\\)\\]"
-    "The regular expression used for DText-style links \"text\":[url].
-Group 1 matches the text.
-Group 2 matches the URL.")
+    "The regular expression used for DText-style links
+\"text\":[url].  Group 1 matches the text.  Group 2 matches
+the URL.")
 
   (defconst dtext-link-wiki-regexp
     "\\[\\[\\(.+?\\)\\(?:|\\(.*?\\)\\)?]]"
-    "The regular expression used for wiki links [[url]], [[url|text]], or [[url|]].
-Group 1 matches the URL.
-Group 2 matches the text (optional).")
+    "The regular expression used for wiki links [[url]],
+[[url|text]], or [[url|]].  Group 1 matches the URL.  Group
+2 matches the text (optional).")
 
   (defconst dtext-link-search-regexp
     (rx "{{"
 	(group (+ (any " " "0-9" "A-Z" "a-z" ?_ ?- ?\( ?\))))
 	"}}")
-    "The regular expression used for search links.
-Group 1 matches the \"URL\".")
+    "The regular expression used for search links.  Group 1
+matches the \"URL\".")
 
   (defconst dtext-link-user-regexp
     "@[-A-Z_a-z]+"
@@ -273,21 +278,23 @@ Return nil otherwise."
                    (when (eq val props) (throw 'found loc))))))))))
 
 (defun dtext--string-starts-with (pattern str)
-  "Returns t if PATTERN is found at the beginning of STR."
+  "Return t if PATTERN is found at the beginning of STR."
   (let ((pattern (concat "^" pattern)))
     (if (string-match pattern str) t)))
 
 (defun dtext--string-ends-with (pattern str)
-  "Returns t if PATTERN is found at the end of STR."
+  "Return t if PATTERN is found at the end of STR."
   (let ((pattern (concat pattern "$")))
     (if (string-match pattern str) t)))
 
 (defun dtext--string-contains (pattern str)
-  "Returns t if PATTERN is found in STR."
+  "Return t if PATTERN is found in STR."
   (if (string-match pattern str) t))
 
 (defun dtext--is-valid-search-string (str)
-  "Validate the search string STR.
+  "Validate the search string STR. Returns t if valid, nil
+otherwise.
+
 This changes the global match data, so be sure to save it."
   (let ((tags (split-string str " "))
 	subtag
@@ -313,11 +320,19 @@ This changes the global match data, so be sure to save it."
 	  (string-match "^_\\|_$" subtag)
 	  (throw 'invalid nil)))))))
 
-(defun dtext--match-links (last &optional markdown wiki search url-link)
+;; (defun dtext--match-links (last &optional markdown wiki search url-link)
+(defun dtext--match-links (last type)
   "Match links with markup between point and LAST.
-TYPE indicates what kind of link it is.
+
+TYPE should be one of the following: 'markdown, 'wiki,
+'search, 'url, or 'dtext. It corresponds to the type of link
+being matched.
+
+If the return value is non-nil, the match data will be set:
+
 Group 1 corresponds to the text part, if any, of the link.
 Group 2 corresponds to the URL part."
+  (cl-assert (member type '(markdown wiki search url)))
   (let* ((pattern (cond
 		   (markdown dtext-link-markdown-regexp)
 		   (wiki dtext-link-wiki-regexp)
@@ -402,9 +417,11 @@ Group 2 corresponds to the URL part."
     found))
 
 (defmacro write-fontify-function (name doc args)
-  "Generates a function called dtext-fontify-NAME.
-DOC is the function's docstring, and ARGS is a list of arguments passed to
-`dtext--match-links' following LAST."
+  "Generate a function called dtext-fontify-NAME.
+DOC is the function's docstring, and ARGS is a list of
+arguments passed to `dtext--match-links' following LAST.
+NAME is used to name the created function
+(dtext-fontify-NAME)."
   (declare (indent 2))
   (let* ((name (symbol-name name))
 	 (function-name (intern
