@@ -401,7 +401,7 @@ Group 2 corresponds to the URL part."
 	url-beg url-end)))
     found))
 
-(defmacro write-fontify-function (name doc arg)
+(defmacro dtext-write-fontify-link-function (name doc arg)
   "Generate a function to fontify links.
 The generated function will be called dtext-fontify-NAME.
 
@@ -426,19 +426,24 @@ function."
 		    (add-face-text-property url-beg url-end 'dtext-link-face))
 		  t))))))
 
-(write-fontify-function markdown-links
+(dtext-write-fontify-link-function
+    markdown-links
     "Fontify Markdown-style links from point to LAST." markdown)
 
-(write-fontify-function wiki-links
+(dtext-write-fontify-link-function
+    wiki-links
     "Fontify wiki links from point to LAST." wiki)
 
-(write-fontify-function search-links
+(dtext-write-fontify-link-function
+    search-links
     "Fontify search links from point to LAST." search)
 
-(write-fontify-function url-links
+(dtext-write-fontify-link-function
+    url-links
     "Fontify plain URLs from point to LAST." url)
 
-(write-fontify-function links
+(dtext-write-fontify-link-function
+    links
     "Fontify links from point to LAST." dtext)
 
 ;;;###autoload
