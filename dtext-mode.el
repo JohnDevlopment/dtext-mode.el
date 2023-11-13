@@ -65,7 +65,7 @@
     :group 'dtext-faces)
 
   (defface dtext-small-face
-    '((t (:inherit shadow :scale 0.8)))
+    '((t (:inherit shadow)))
     "Face for small text."
     :group 'dtext-faces)
 
