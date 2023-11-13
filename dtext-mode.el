@@ -512,7 +512,7 @@ bind them to their respective keys."
     (dtext-mode)))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.dtext$\\'" . dtext-mode))
+(add-to-list 'auto-mode-alist '("\\.dtext\\'" . dtext-mode))
 
 (provide 'dtext-mode)
 
