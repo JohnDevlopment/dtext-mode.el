@@ -278,8 +278,8 @@ Return nil otherwise."
                    (when (eq val props) (throw 'found loc))))))))))
 
 (defun dtext--is-valid-search-string (str)
-  "Validate the search string STR. Returns t if valid, nil
-otherwise.
+  "Validate the search string STR and return t if it is valid.
+Returns nil if the string is not valid.
 
 This changes the global match data, so be sure to save it."
   (let ((tags (split-string str " "))
@@ -309,9 +309,9 @@ This changes the global match data, so be sure to save it."
 (defun dtext--match-links (last type)
   "Match links with markup between point and LAST.
 
-TYPE should be one of the following: 'markdown, 'wiki,
-'search, 'url, or 'dtext. It corresponds to the type of link
-being matched.
+TYPE should be one of the following: \\='markdown, \\='wiki,
+\\='search, \\='url, or \\='dtext. It corresponds to the
+type of link being matched.
 
 If the return value is non-nil, the match data will be set:
 
@@ -403,9 +403,11 @@ Group 2 corresponds to the URL part."
     found))
 
 (defmacro write-fontify-function (name doc arg)
-  "Generate a function called dtext-fontify-NAME.  DOC is
-the function's docstring, and is the TYPE argument to
-`dtext--match-links'.  NAME is used to name the created
+  "Generate a function to fontify links.
+The generated function will be called dtext-fontify-NAME.
+
+DOC is the function's docstring, and is the TYPE argument to
+`dtext--match-links'. NAME is used to name the created
 function."
   (declare (indent 2))
   (let* ((name (symbol-name name))
@@ -479,6 +481,8 @@ if the tag has no closing tag."
     (goto-char (+ (mark) body-offset))))
 
 (defmacro dtext-bind-insert-tag-commands ()
+  "Create functions to insert the tags defined in `dtext-tags', and
+bind them to their respective keys."
   (declare (indent 2))
   `(progn
      ,@(cl-mapcan
