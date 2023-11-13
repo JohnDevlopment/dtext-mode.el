@@ -36,12 +36,12 @@ This creates a collaspible block of text.
    :END:
 
 #+BEGIN: clocktable :scope subtree :maxlevel 2
-#+CAPTION: Clock summary at [2023-11-09 Thu 15:18]
+#+CAPTION: Clock summary at [2023-11-12 Sun 12:49]
 | Headline     | Time    |       |
 |--------------+---------+-------|
-| *Total time* | *11:11* |       |
+| *Total time* | *12:04* |       |
 |--------------+---------+-------|
-| \_  Links    |         | 11:11 |
+| \_  Links    |         | 12:04 |
 #+END:
 
 *** DONE URL Links
@@ -51,6 +51,14 @@ This creates a collaspible block of text.
     :LOGBOOK:
     CLOCK: [2023-10-29 Sun 15:26]--[2023-10-29 Sun 16:58] =>  1:32
     :END:
+
+#+BEGIN: clocktable :scope subtree :maxlevel 2
+#+CAPTION: Clock summary at [2023-11-12 Sun 12:51]
+| Headline     | Time    |
+|--------------+---------|
+| *Total time* | *11:12* |
+|--------------+---------|
+#+END:
 
 **** DONE Font Lock
      DEADLINE: <2023-11-09 Thu 21:00>
@@ -89,6 +97,14 @@ This creates a collaspible block of text.
   - [X] link sans qualfieir (e.g., ~[[Fate (series)|]]~)
 - [X] search link (e.g. ~{{kantai_collection comic}}~)
 - [X] user (e.g., ~@bob~)
+
+#+BEGIN: clocktable :scope subtree :maxlevel 2
+#+CAPTION: Clock summary at [2023-11-12 Sun 12:51]
+| Headline     | Time   |
+|--------------+--------|
+| *Total time* | *9:40* |
+|--------------+--------|
+#+END:
 
 *** DONE Post Links
     - State "DONE"       from "TODO"       [2023-11-08 Wed 11:36]
@@ -135,6 +151,15 @@ This creates a collaspible block of text.
    CLOCK: [2023-10-29 Sun 20:56]--[2023-10-29 Sun 21:16] =>  0:20
    CLOCK: [2023-10-29 Sun 19:30]--[2023-10-29 Sun 20:40] =>  1:10
    :END:
+
+#+BEGIN: clocktable :scope subtree :maxlevel 2
+#+CAPTION: Clock summary at [2023-11-12 Sun 12:52]
+| Headline     | Time   |      |
+|--------------+--------+------|
+| *Total time* | *1:30* |      |
+|--------------+--------+------|
+| \_  Headers  |        | 1:30 |
+#+END:
 
 #+begin_src dtext
 h1. Header
@@ -208,6 +233,15 @@ Output:
 - [X] nodtext
 - [X] spoilers
 
+#+BEGIN: clocktable :scope subtree :maxlevel 2
+#+CAPTION: Clock summary at [2023-11-12 Sun 12:52]
+| Headline       | Time   |      |
+|----------------+--------+------|
+| *Total time*   | *2:21* |      |
+|----------------+--------+------|
+| \_  Basic tags |        | 2:21 |
+#+END:
+
 ** TODO Links
    DEADLINE: <2023-11-30 Thu>
    - State "TODO"       from              [2023-11-09 Thu 23:30]
@@ -264,3 +298,33 @@ This creates the following result:
 | 4 | 5 | 6 |
 
 Mainly need a command for inserting tables.
+
+** TODO Sections
+
+   - State "TODO"       from              [2023-11-12 Sun 12:53]
+
+*** TODO External Links Section
+    DEADLINE: <2023-12-31 Sun>
+
+    - State "TODO"       from              [2023-11-12 Sun 12:41]
+
+Insert a link at point pointing to a list item in a section called
+/External links/.
+
+#+begin_src
+Link to external links section
+                               ^
+#+end_src
+
+After insert:
+
+#+begin_src dtext
+Link to external links section "[1]":[#dtext-ext-links]
+
+...
+
+h4. External links
+
+1. [Some link]
+   ^
+#+end_src
