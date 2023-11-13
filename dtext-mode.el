@@ -478,7 +478,7 @@ if the tag has no closing tag."
 	(goto-char start)
 	(delete-region start end)))
     (setq start (point))
-    (insert (concat opening-tag between-tags closing-tag))
+    (insert opening-tag between-tags closing-tag)
     (deactivate-mark)
     (set-mark (+ start (length opening-tag)))
     (goto-char (+ (mark) body-offset))))
