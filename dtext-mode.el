@@ -360,8 +360,7 @@ Group 2 corresponds to the URL part."
 	      text-beg (match-beginning 2)
 	      text-end (match-end 2)
 	      url-beg (match-beginning 1)
-	      url-end (match-end 1)
-	      ))
+	      url-end (match-end 1)))
        ((eq type 'search)
 	;; Search links
 	;; This has some additional checks to it. Firstly,
