@@ -1,4 +1,4 @@
-;;; dtext-mode.el --- Major mode for Danbooru DText
+;;; dtext-mode.el --- Major mode for Danbooru DText -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2023 John Russell
 ;; Author:           John Russell <johndevlopment7@gmail.com>
@@ -282,8 +282,7 @@ Returns nil if the string is not valid.
 
 This changes the global match data, so be sure to save it."
   (let ((tags (split-string str " "))
-	subtag
-	idx)
+	subtag)
     (catch 'invalid
       ;; Return nil if two or more of either underscores or
       ;; hyphens are found
@@ -493,7 +492,7 @@ bind them to their respective keys."
 	  (let ()
 	    (cl-destructuring-bind (tag _face key body . _attrs) tag-spec
 	      (let ((function-name (intern (concat "dtext-insert-tag-" tag))))
-		`((defun ,function-name (&optional start end)
+		`((defun ,function-name ()
 		    ,(format "Insert the DText [%s] tag at point or %s the region."
 			     tag (if body "around" "before"))
 		    (interactive)
