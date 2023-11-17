@@ -447,7 +447,7 @@ function."
 
 ;;; Insertions =================================================================
 
-(defun dtext--insert-link (type url &optional text arg)
+(defun dtext--insert-link (type url &optional text)
   (let (start end string)
     (when (use-region-p)
       ;; Region is active
@@ -462,12 +462,14 @@ function."
 	 (user-error "Missing text argument"))
        (setq string (format "\"%s\":[%s]" text url)))
       ('wiki
-       (setq string (format "[[%s%s]]"
-			    url
-			    (if (and text (> (length text) 0))
+       (setq string (format "[[%s%s]]" url
+			    (if (and text (not (string= text "")))
 				(concat "|" text)
 			      ""))))
       ('search
+       (when (and (or (not url) (string= url ""))
+		  (or (not text) (string= text "")))
+	 (user-error "Missing query argument"))
        (setq string (format "{{%s}}" (or url text))))
       (_
        (user-error "Unknown type: %s" type)))
@@ -506,7 +508,7 @@ for the link." t)
 
 If the region is active, the text inside it is used as QUERY."
   (interactive (list (unless (use-region-p)
-		       (read-from-minibuffer "URL: "))))
+		       (read-from-minibuffer "Query: "))))
   (dtext--insert-link 'search query))
 
 (defun dtext-insert-tag (tag body)
