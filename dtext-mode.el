@@ -153,13 +153,14 @@ matches the \"URL\".")
   ;; Keys for DText-specific tags begin with 'C-c C-d'
   ;; Keys for tables begin with 'C-c C-b'
   (defconst dtext-tags
-    '(("b"        bold                     "C-c C-t b" 1)
+    '(;; Standard formatting tags, prefix: 'C-c C-t'
+      ("b"        bold                     "C-c C-t b" 1)
       ("code"     dtext-code-face          "C-c C-t c" t)
       ("i"        italic                   "C-c C-t i" 1)
       ("quote"    nil                      "C-c C-t q" t)
       ("s"        nil                      "C-c C-t s" 1)
       ("u"        underline                "C-c C-t u" 1)
-
+      ;; DText-specific tags, prefix: 'C-c C-d'
       ("expand"   nil                      "C-c C-d e" t)
       ("nodtext"  dtext-code-face          "C-c C-d n" t)
       ("spoilers" nil                      "C-c C-d s" 1)
