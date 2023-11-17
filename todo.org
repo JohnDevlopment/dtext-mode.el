@@ -244,20 +244,55 @@ Output:
 
 ** TODO Links
    DEADLINE: <2023-11-30 Thu>
+   :LOGBOOK:
+   CLOCK: [2023-11-16 Thu 19:20]--[2023-11-16 Thu 22:39] =>  3:19
+   :END:
    - State "TODO"       from              [2023-11-09 Thu 23:30]
 
+Links are composed of two parts, the text and the URL. A complete link can be
+made in either the DText style or Markdown style. There are, broadly speaking,
+three types of DText-style links:
+
+1. A URL link
+2. A wiki link
+3. A search link
+
+For these kinds of links, the insertion function must know which to
+insert. Alternatively, three separate functions can exist for each type.
+
+#+caption: Example of inserting text
+#+begin_example
+[Input]
+C-c C-l l
+"URL: " URL
+"Text: " Text
+
+[Output]
+"Text":[URL]
+#+end_example
+
+A function accepts arguments to differentiate the different types of links. It
+needs:
+
+1. The link type
+2. The URL
+3. The text (optional)
+
+----------
+
+- [ ] Markdown (e.g., ~[Text](URL)~)
+- [ ] DText [0/3]
+  - [ ] URL link (e.g., ~"Text":[URL]~)
+  - [ ] Wiki link [0/3]
+    - [ ] Default (e.g., ~[​[wiki page (qualifier)]]~)
+    - [ ] Without the qualifier(s) (e.g., ~[​[wiki page (qualifier)|]]~)
+    - [ ] Alternate text (e.g., ~[​[wiki page (qualifier)|some wiki page]]~)
+  - [ ] Search link (e.g., ~{{tag1 tag2 -tag3 tag*}}~)
+
 #+begin_comment
-- [ ] bare link (e.g., ~example.com~)
-- [ ] angled link (e.g., ~<example.com>~
 - [ ] link with text (e.g., ~"Example":[example.com]~)
   - [ ] link to a Danbooru page (e.g., ~"TOS":[/terms_of_service]~)
   - [ ] link to a header (e.g., ~"Here":[#dtext-basic-formatting]~)
-- [ ] Markdown-style link (e.g., ~[Example](example.com)~)
-- [ ] wiki links [0/3]
-  - [ ] normal link (e.g., ~[[Kantai Collection]]~)
-  - [ ] link with alternate text (e.g., ~[[Kantai Collection|Kancolle]]~)
-  - [ ] link sans qualfieir (e.g., ~[[Fate (series)|]]~)
-- [ ] search link (e.g. ~{{kantai_collection comic}}~)
 - [ ] user (e.g., ~@bob~)
 #+end_comment
 
