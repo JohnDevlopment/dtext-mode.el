@@ -445,17 +445,69 @@ function."
     links
     "Fontify links from point to LAST." dtext)
 
-;;;###autoload
-(define-derived-mode dtext-mode text-mode "DText"
-  "Major mode for writing Danbooru's DText markup.
+;;; Insertions =================================================================
 
-\\{dtext-mode-map}"
-  :group 'dtext
-  (set 'font-lock-multiline t)
-  (set 'font-lock-defaults
-       '(dtext-font-lock-keywords nil t))
-  (auto-fill-mode 0)
-  (visual-line-mode 1))
+(defun dtext--insert-link (type url &optional text arg)
+  (let (start end string)
+    (when (use-region-p)
+      ;; Region is active
+      (setq start (region-beginning) end (region-end)
+	    text (buffer-substring start end))
+      (goto-char start)
+      (delete-region start end))
+    (setq start (point) string "")
+    (pcase type
+      ('url
+       (when (or (not text) (string= text ""))
+	 (user-error "Missing text argument"))
+       (setq string (format "\"%s\":[%s]" text url)))
+      ('wiki
+       (setq string (format "[[%s%s]]"
+			    url
+			    (if (and text (> (length text) 0))
+				(concat "|" text)
+			      ""))))
+      ('search
+       (setq string (format "{{%s}}" (or url text))))
+      (_
+       (user-error "Unknown type: %s" type)))
+    (insert string)
+    (deactivate-mark)))
+
+(defmacro dtext--create-insert-link-function (type doc &optional text)
+  "Generate a function called dtext-insert-link-TYPE, where TYPE
+indicates what kind of link to insert. If TEXT is non-nil,
+the TEXT arg in the generated function is optional."
+  (declare (indent 2))
+  (let* ((type-name (symbol-name type))
+	 (function-name
+	  (intern (concat "dtext-insert-link-" type-name)))
+	 (attrs (if text '(url &optional text) '(url text)))
+	 (region-doc "If the region is active, the text inside it is used as the\nTEXT."))
+    `(progn
+       (defun ,function-name ,attrs
+	 ,(concat doc "\n\n" region-doc)
+	 (interactive (list
+		       (read-from-minibuffer "URL: ")
+		       (unless (use-region-p)
+			 (read-from-minibuffer "Text: "))))
+	 (dtext--insert-link ',type url text)))))
+
+(dtext--create-insert-link-function url
+    "Insert a DText-style link to URL with text TEXT.")
+
+(dtext--create-insert-link-function wiki
+    "Insert a wiki link at point to URL.
+The optional arg TEXT can be used to provide alternate text
+for the link." t)
+
+(defun dtext-insert-link-search (&optional query)
+  "Insert search at point. QUERY is the search string.
+
+If the region is active, the text inside it is used as QUERY."
+  (interactive (list (unless (use-region-p)
+		       (read-from-minibuffer "URL: "))))
+  (dtext--insert-link 'search query))
 
 (defun dtext-insert-tag (tag body)
   "Insert the DText tag named TAG at point.
@@ -483,6 +535,20 @@ if the tag has no closing tag."
     (set-mark (+ start (length opening-tag)))
     (goto-char (+ (mark) body-offset))))
 
+;;;###autoload
+(define-derived-mode dtext-mode text-mode "DText"
+  "Major mode for writing Danbooru's DText markup.
+
+\\{dtext-mode-map}"
+  :group 'dtext
+  (set 'font-lock-multiline t)
+  (set 'font-lock-defaults
+       '(dtext-font-lock-keywords nil t))
+  (auto-fill-mode 0)
+  (visual-line-mode 1))
+
+;;; Bindings ===================================================================
+
 (defmacro dtext-bind-insert-tag-commands ()
   "Create functions to insert the tags defined in `dtext-tags', and
 bind them to their respective keys."
@@ -503,6 +569,11 @@ bind them to their respective keys."
 	dtext-tags)))
 
 (dtext-bind-insert-tag-commands)
+
+(progn
+  (define-key dtext-mode-map (kbd "C-c C-l l") #'dtext-insert-link-url)
+  (define-key dtext-mode-map (kbd "C-c C-l w") #'dtext-insert-link-wiki)
+  (define-key dtext-mode-map (kbd "C-c C-l s") #'dtext-insert-link-search))
 
 ;;;###autoload
 (defun dtext-scratch ()
