@@ -562,7 +562,8 @@ These tags are then binded to their respective keys."
      ,@(cl-mapcan
 	(lambda (tag-spec)
 	  (let ()
-	    (cl-destructuring-bind (tag _face key body . _attrs) tag-spec
+	    ;; Note: 'attrs' is not used
+	    (cl-destructuring-bind (tag _face key body . attrs) tag-spec
 	      (let ((function-name (intern (concat "dtext-insert-tag-" tag))))
 		`((defun ,function-name ()
 		    ,(format "Insert the DText [%s] tag at point or %s the region."
