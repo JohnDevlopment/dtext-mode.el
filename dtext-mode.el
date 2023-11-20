@@ -477,9 +477,12 @@ function."
     (deactivate-mark)))
 
 (defmacro dtext--create-insert-link-function (type doc &optional text)
-  "Generate a function called dtext-insert-link-TYPE, where TYPE
-indicates what kind of link to insert. If TEXT is non-nil,
-the TEXT arg in the generated function is optional."
+  "Create a function that inserts a link of the specified TYPE.
+
+The generated function has the name dtext-insert-link-TYPE.
+DOC is the documentation of the created function. The
+optional arg TEXT, if non-nil, indicates that the function
+accepts a TEXT arg."
   (declare (indent 2))
   (let* ((type-name (symbol-name type))
 	 (function-name
@@ -552,8 +555,8 @@ if the tag has no closing tag."
 ;;; Bindings ===================================================================
 
 (defmacro dtext-bind-insert-tag-commands ()
-  "Create functions to insert the tags defined in `dtext-tags', and
-bind them to their respective keys."
+  "Create functions to insert the tags defined in `dtext-tags'.
+These tags are then binded to their respective keys."
   (declare (indent 2))
   `(progn
      ,@(cl-mapcan
